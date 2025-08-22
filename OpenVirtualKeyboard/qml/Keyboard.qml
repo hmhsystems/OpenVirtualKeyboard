@@ -14,15 +14,16 @@ Item {
     id: keyboard
     
     property real padding: width * 0.05
-    property real leftPadding: width * 0.05
-    property real rightPadding: width * 0.05
+    property real leftPadding: Math.max(Screen.pixelDensity * 12, (Window.width - (Screen.pixelDensity * 168))/2)
+    property real rightPadding: Math.max(Screen.pixelDensity * 12, (Window.width - (Screen.pixelDensity * 168))/2)
     property real topPadding: width * 0.005
     property real bottomPadding: width * 0.045
     property KeyboardStyle style: KeyboardStyle {}
 
     objectName: "keyboard"
-    width: parent ? parent.width : 0
-    height: width * 0.34
+    //width: parent ? Math.min(Window.width, Screen.pixelDensity * 168) : 0
+    width: parent ? Window.width : 0
+    height: (width - (keyboard.leftPadding * 2) ) * 0.37
     parent: Overlay.overlay
     z:1;
 
@@ -37,21 +38,21 @@ Item {
         spaceKey: Qt.createComponent( style.spaceKeyUrl )
         hideKey: Qt.createComponent( style.hideKeyUrl )
         symbolKey: Qt.createComponent( style.symbolKeyUrl )
-        languageKey: Qt.createComponent( style.languageKeyUrl )
+        //languageKey: Qt.createComponent( style.languageKeyUrl )
         nextPageKey: Qt.createComponent( style.nextPageKeyUrl )
         keyPreview: Qt.createComponent( style.keyPreviewUrl )
         keyAlternativesPreview: Qt.createComponent( style.keyAlternativesPreviewUrl )
-        languageMenu: Qt.createComponent( style.languageMenuUrl )
+        //languageMenu: Qt.createComponent( style.languageMenuUrl )
     }
 
     MouseArea {
         anchors.fill: parent // to avoid clicks propagate through the background
     }
 
-    Loader {
-        anchors.fill: parent
-        source: style.backgroundUrl
-    }
+    // Loader {
+    //     anchors.fill: parent
+    //     source: style.backgroundUrl
+    // }
 
     Item {
         id: keyboardContent

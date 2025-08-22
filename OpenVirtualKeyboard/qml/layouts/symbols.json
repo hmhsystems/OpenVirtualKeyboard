@@ -44,7 +44,7 @@
             { "type": "language" },
             { "type": "space", "stretch": 4 },
             { "type": "key", "text": "." },
-            { "type": "key", "text": ":-)", "alternatives": [ ";-)", ":-)", ":-D", ":-(", "<3" ] },
+            { "type": "key", "text": "@", "alternatives": [ ";-)", ":-)", ":-D", ":-(", "<3" ] },
             { "type": "hide" }
         ]
     ],
@@ -93,7 +93,7 @@
             { "type": "language" },
             { "type": "space", "stretch": 4 },
             { "type": "key", "text": "…" },
-            { "type": "key", "text": ":-)", "alternatives": [ ";-)", ":-)", ":-D", ":-(", "<3" ] },
+            { "type": "key", "text": "@", "alternatives": [ ";-)", ":-)", ":-D", ":-(", "<3" ] },
             { "type": "hide" }
         ]
     ]

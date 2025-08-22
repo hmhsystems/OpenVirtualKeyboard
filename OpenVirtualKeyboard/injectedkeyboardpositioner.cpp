@@ -33,7 +33,7 @@ void InjectedKeyboardPositioner::setKeyboardObject( QObject* keyboardObject )
     updateFocusItem( _focusItem );
 
     if (_contentItem)
-        _keyboard->setY( _contentItem->height() );
+        _keyboard->setY( _contentItem->height() ); // inicia fora da tela (abaixo)
 
     connect( qGuiApp,
              &QGuiApplication::applicationStateChanged,
@@ -120,11 +120,11 @@ void InjectedKeyboardPositioner::show()
         if (_animation) {
             _animation->setTargetObject( nullptr );
             _animation->setStartValue( _contentItem->height() + _offset );
-            _animation->setEndValue( _contentItem->height() - _keyboard->height() + _offset );
+            _animation->setEndValue( visibleKeyboardTopY() + _offset );
             _animation->setTargetObject( _keyboard );
             _animation->start();
         } else {
-            _keyboard->setY( _contentItem->height() - _keyboard->height() + _offset );
+            _keyboard->setY( visibleKeyboardTopY() + _offset );
         }
     } );
 }
@@ -139,12 +139,12 @@ void InjectedKeyboardPositioner::hide()
     if (_animation) {
         _animation->setTargetObject( nullptr );
         _animation->setStartValue( _keyboard->y() );
-        _animation->setEndValue( _keyboard->y() + _keyboard->height() );
+        _animation->setEndValue( _contentItem->height() + _offset ); // anima para fora da tela (abaixo)
         _animation->setTargetObject( _keyboard );
         _animation->start();
     } else {
         _contentItem->setY( 0 );
-        _keyboard->setY( _contentItem->height() );
+        _keyboard->setY( _contentItem->height() + _offset );
     }
 }
 
@@ -163,9 +163,9 @@ void InjectedKeyboardPositioner::updateContentItemPosition( bool updateKeyboardP
 
     auto focusItemBottom = _contentItem->mapFromItem( _focusItem, QPointF( 0, 0 )).y()
         + _focusItem->height() + 5; // count with 5px spacing
-    auto keyboardTop = _contentItem->height() - _keyboard->height();
+    auto keyboardTop = visibleKeyboardTopY();
     _offset = _scrollContentItem
-                 ? focusItemBottom > keyboardTop ? focusItemBottom - keyboardTop : 0
+                 ? (focusItemBottom > keyboardTop ? (focusItemBottom - keyboardTop) : 0)
                  : 0;
     _contentItem->setY( -_offset );
     if (updateKeyboardPosition)
@@ -181,7 +181,7 @@ void InjectedKeyboardPositioner::onHeightChanged()
     if (_shown)
         updateContentItemPosition( true );
     else
-        _keyboard->setY( _contentItem->height() + _offset );
+        _keyboard->setY( _contentItem->height() + _offset ); // mantém fora da tela quando oculto
 }
 
 void InjectedKeyboardPositioner::onApplicationStateChanged( Qt::ApplicationState s )
@@ -202,6 +202,14 @@ void InjectedKeyboardPositioner::onAnimationFinished()
 
     if (!_shown) {
         _contentItem->setY( 0 );
-        _keyboard->setY( _contentItem->height() );
+        _keyboard->setY( _contentItem->height() + _offset ); // garante fora da tela ao finalizar hide()
     }
+}
+
+qreal InjectedKeyboardPositioner::visibleKeyboardTopY() const
+{
+    if (!_contentItem || !_keyboard)
+        return 0;
+    // Centro + deslocamento (positivo move para baixo)
+    return (_contentItem->height() - _keyboard->height()) / 2.0 + _centerBias;
 }
