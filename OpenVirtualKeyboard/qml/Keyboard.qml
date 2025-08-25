@@ -38,11 +38,11 @@ Item {
         spaceKey: Qt.createComponent( style.spaceKeyUrl )
         hideKey: Qt.createComponent( style.hideKeyUrl )
         symbolKey: Qt.createComponent( style.symbolKeyUrl )
-        //languageKey: Qt.createComponent( style.languageKeyUrl )
+        languageKey: Qt.createComponent( style.languageKeyUrl )
         nextPageKey: Qt.createComponent( style.nextPageKeyUrl )
         keyPreview: Qt.createComponent( style.keyPreviewUrl )
         keyAlternativesPreview: Qt.createComponent( style.keyAlternativesPreviewUrl )
-        //languageMenu: Qt.createComponent( style.languageMenuUrl )
+        languageMenu: Qt.createComponent( style.languageMenuUrl )
     }
 
     MouseArea {
