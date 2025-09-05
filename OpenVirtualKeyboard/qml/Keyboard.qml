@@ -14,8 +14,8 @@ Item {
     id: keyboard
     
     property real padding: width * 0.05
-    property real leftPadding: Math.max(Screen.pixelDensity * 12, (Window.width - (Screen.pixelDensity * 168))/2)
-    property real rightPadding: Math.max(Screen.pixelDensity * 12, (Window.width - (Screen.pixelDensity * 168))/2)
+    property real leftPadding: Math.max(Screen.pixelDensity * 12 * (InputContext.dpiScale /100), (Window.width - (Screen.pixelDensity * 168 * (InputContext.dpiScale /100)))/2)
+    property real rightPadding: Math.max(Screen.pixelDensity * 12 * (InputContext.dpiScale /100) , (Window.width - (Screen.pixelDensity * 168 * (InputContext.dpiScale /100)))/2)
     property real topPadding: width * 0.005
     property real bottomPadding: width * 0.045
     property KeyboardStyle style: KeyboardStyle {}

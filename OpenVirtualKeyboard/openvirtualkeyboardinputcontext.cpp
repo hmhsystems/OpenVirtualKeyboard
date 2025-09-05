@@ -39,6 +39,21 @@ OpenVirtualKeyboardInputContext::OpenVirtualKeyboardInputContext( const QStringL
         if (s == Qt::ApplicationInactive)
             qGuiApp->inputMethod()->hide();
     });
+
+    QString dpiScaleParam;
+    for (const QString &param : params) {
+        if (QRegularExpression("^dpiScale=\\d+$", QRegularExpression::CaseInsensitiveOption).match(param).hasMatch()) {
+            dpiScaleParam = param;
+            break;
+        }
+    }
+    if (!dpiScaleParam.isEmpty()) {
+        bool ok = false;
+        int scale = dpiScaleParam.split('=').last().toInt(&ok);
+        if (ok) {
+            setDpiScale(scale);
+        }
+    }
 }
 
 OpenVirtualKeyboardInputContext::~OpenVirtualKeyboardInputContext() = default;
@@ -452,6 +467,9 @@ void OpenVirtualKeyboardInputContext::loadKeyboard()
         connect( _keyboardCreator.get(), &KeyboardCreator::created, this, [this] {
             _positioner->setKeyboardObject( _keyboardCreator->keyboardObject() );
 
+            // Pass dpiScale to QML
+            _keyboardCreator->keyboardObject()->setProperty("dpiScale", _dpiScale);
+
             connect( _positioner.get(),
                      &InjectedKeyboardPositioner::animatingChanged,
                      this,
@@ -554,4 +572,17 @@ AbstractPositioner* OpenVirtualKeyboardInputContext::createPositioner( bool inOw
     if (inOwnWindow)
         return new KeyboardWindowPositioner;
     return new InjectedKeyboardPositioner( noContentScroll );
+}
+
+int OpenVirtualKeyboardInputContext::dpiScale() const
+{
+    return _dpiScale;
+}
+
+void OpenVirtualKeyboardInputContext::setDpiScale(int scale)
+{
+    if (_dpiScale != scale) {
+        _dpiScale = scale;
+        emit dpiScaleChanged();
+    }
 }

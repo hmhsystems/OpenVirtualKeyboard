@@ -34,6 +34,7 @@ class OpenVirtualKeyboardInputContext : public QPlatformInputContext {
             NOTIFY enterKeyActionChanged)
     Q_PROPERTY(KeyboardLayoutsProvider* layoutProvider READ layoutProvider
             NOTIFY layoutProviderChanged)
+    Q_PROPERTY(int dpiScale READ dpiScale WRITE setDpiScale NOTIFY dpiScaleChanged)
 public:
     OpenVirtualKeyboardInputContext(const QStringList& params);
     ~OpenVirtualKeyboardInputContext() override;
@@ -53,6 +54,7 @@ public:
     bool enterKeyActionEnabled() const;
     Qt::EnterKeyType enterKeyAction() const;
     KeyboardLayoutsProvider* layoutProvider() const;
+    int dpiScale() const;
 
 signals:
     void shiftOnChanged();
@@ -62,6 +64,7 @@ signals:
     void enterKeyActionEnabledChanged();
     void enterKeyActionChanged();
     void layoutProviderChanged();
+    void dpiScaleChanged();
 
 public slots:
     void setShiftOn(bool shiftOn);
@@ -72,6 +75,7 @@ public slots:
     void setLayoutType(KeyboardLayoutType::Type layoutType);
     void setEnterKeyActionEnabled(bool enterActionEnabled);
     void setEnterKeyAction(Qt::EnterKeyType type);
+    void setDpiScale(int scale);
 
 private slots:
     void onFocusItemEnterKeyActionChanged();
@@ -115,6 +119,7 @@ private:
     KeyboardLayoutType::Type _layoutType = KeyboardLayoutType::Alphabet;
     bool _enterKeyActionEnabled = false;
     Qt::EnterKeyType _enterKeyAction = Qt::EnterKeyDefault;
+    int _dpiScale = 100; // Default value
 };
 
 #endif // OPENVIRTUALKEYBOARDINPUTCONTEXT_H
