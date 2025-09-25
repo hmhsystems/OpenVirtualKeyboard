@@ -17,7 +17,7 @@ Rectangle {
     }
 
     Icon {
-        visible: !languageName.visible
+        //visible: !languageName.visible
         anchors {
             centerIn: bg
             verticalCenterOffset: bg.height * 0.2
@@ -27,12 +27,12 @@ Rectangle {
         name: 'myspace'
     }
 
-    Text {
-        id: languageName
-        visible: contentWidth < bg.width + 20
-        anchors.centerIn: parent
-        font.pixelSize: parent.height * 0.4
-        color: "dimgray"
-        text: Qt.locale( parent.parent.selectedLayout ).nativeLanguageName
-    }
+    // Text {
+    //     id: languageName
+    //     visible: contentWidth < bg.width + 20
+    //     anchors.centerIn: parent
+    //     font.pixelSize: parent.height * 0.4
+    //     color: "dimgray"
+    //     text: Qt.locale( parent.parent.selectedLayout ).nativeLanguageName
+    // }
 }

@@ -45,7 +45,7 @@ T.Popup {
         clip: true
         delegate: T.ItemDelegate {
             id: item
-            width: parent.width
+            width: parent?.width
             height: popup.parent.height * 0.86
             leftPadding: 12
             leftInset: 1

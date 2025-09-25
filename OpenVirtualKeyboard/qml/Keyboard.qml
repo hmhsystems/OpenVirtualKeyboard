@@ -14,15 +14,16 @@ Item {
     id: keyboard
     
     property real padding: width * 0.05
-    property real leftPadding: width * 0.05
-    property real rightPadding: width * 0.05
+    property real leftPadding: Math.max(Screen.pixelDensity * 12 * (InputContext.dpiScale /100), (Window.width - (Screen.pixelDensity * 168 * (InputContext.dpiScale /100)))/2)
+    property real rightPadding: Math.max(Screen.pixelDensity * 12 * (InputContext.dpiScale /100) , (Window.width - (Screen.pixelDensity * 168 * (InputContext.dpiScale /100)))/2)
     property real topPadding: width * 0.005
     property real bottomPadding: width * 0.045
     property KeyboardStyle style: KeyboardStyle {}
 
     objectName: "keyboard"
-    width: parent ? parent.width : 0
-    height: width * 0.34
+    //width: parent ? Math.min(Window.width, Screen.pixelDensity * 168) : 0
+    width: parent ? Window.width : 0
+    height: (width - (keyboard.leftPadding * 2) ) * 0.37
     parent: Overlay.overlay
     z:1;
 
@@ -48,10 +49,10 @@ Item {
         anchors.fill: parent // to avoid clicks propagate through the background
     }
 
-    Loader {
-        anchors.fill: parent
-        source: style.backgroundUrl
-    }
+    // Loader {
+    //     anchors.fill: parent
+    //     source: style.backgroundUrl
+    // }
 
     Item {
         id: keyboardContent
