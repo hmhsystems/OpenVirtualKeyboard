@@ -12,11 +12,12 @@ import QtQuick.Templates 2.12 as T
 T.Popup {
     id: popup
 
-    width: parent.height * 4
+    width: parent.height * 4.5
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
                              contentHeight + topPadding + bottomPadding)
     margins: 0
     verticalPadding: 3
+    z: 2;
 
     enter: Transition {
         NumberAnimation { property: "scale"; from: 0.9; to: 1.0; easing.type: Easing.OutQuint; duration: 220 }
