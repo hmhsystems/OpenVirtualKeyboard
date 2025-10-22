@@ -13,17 +13,18 @@ import "style"
 Item {
     id: keyboard
     
-    property real padding: width * 0.05
+    property real contentWidth: width - keyboard.leftPadding - keyboard.rightPadding
+    property real padding: contentWidth * 0.05
     property real leftPadding: Math.max(Screen.pixelDensity * 12 * (InputContext.dpiScale /100), (Window.width - (Screen.pixelDensity * 168 * (InputContext.dpiScale /100)))/2)
     property real rightPadding: Math.max(Screen.pixelDensity * 12 * (InputContext.dpiScale /100) , (Window.width - (Screen.pixelDensity * 168 * (InputContext.dpiScale /100)))/2)
-    property real topPadding: width * 0.005
-    property real bottomPadding: width * 0.045
+    property real topPadding: contentWidth * 0.005
+    property real bottomPadding: contentWidth * 0.045
     property KeyboardStyle style: KeyboardStyle {}
 
     objectName: "keyboard"
     //width: parent ? Math.min(Window.width, Screen.pixelDensity * 168) : 0
     width: parent ? Window.width : 0
-    height: (width - (keyboard.leftPadding * 2) ) * 0.37
+    height: keyboard.contentWidth * 0.37
     parent: Overlay.overlay
     z:1;
 

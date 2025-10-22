@@ -23,6 +23,7 @@ SOURCES += \
     keyboardcreator.cpp \
     keyboardlayoutmodel.cpp \
     keyboardlayoutsprovider.cpp \
+    keyboardsettings.cpp \
     keyboardstyle.cpp \
     keyboardwindowpositioner.cpp \
     keypressinterceptor.cpp \
@@ -41,6 +42,7 @@ HEADERS += \
     keyboardlayoutmodel.h \
     keyboardlayoutsprovider.h \
     keyboardlayouttype.h \
+    keyboardsettings.h \
     keyboardstyle.h \
     keyboardwindowpositioner.h \
     keypressinterceptor.h \
@@ -57,4 +59,5 @@ unix {
 }
 
 RESOURCES += \
-    qml.qrc
+    qml.qrc \
+    keyboardSettings.ini
