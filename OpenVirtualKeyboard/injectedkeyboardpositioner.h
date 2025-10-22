@@ -26,15 +26,13 @@ public:
     void hide() override;
     bool isAnimating() const override;
 
-    // novo: deslocamento em pixels (positivo = abaixo do centro)
-    void setCenterBias(qreal px) { _centerBias = px; }
-
 private:
     void updateContentItemPosition(bool updateKeyboardPosition);
     void onHeightChanged();
     void onApplicationStateChanged(Qt::ApplicationState s);
     void onAnimationFinished();
-    qreal visibleKeyboardTopY() const; // posição Y (top) quando o teclado está visível, centralizado
+    qreal visibleKeyboardTopY() const;
+    qreal calculateCenterBias() const;
 
     bool _scrollContentItem = true;
     bool _shown = false;
@@ -45,9 +43,6 @@ private:
     QPointer<QQuickItem> _focusItem;
     bool _focusItemChanged = false;
     bool _appStateReactivated = false; // To mitigate issue when
-        // app is inactive/active.
-    // novo: deslocamento padrão (px). Ajuste aqui se quiser um valor fixo.
-    qreal _centerBias = 45.0;
 };
 
 #endif // INJECTEDKEYBOARDPOSITIONER_H
