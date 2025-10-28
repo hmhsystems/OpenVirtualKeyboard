@@ -8,14 +8,14 @@
 #include <QSettings>
 #include <QStandardPaths>
 
-constexpr char kUserSettingsFileName[] = "keyboardSettings.ini";
-constexpr char kDefaultSettingsFilePath[] = ":/keyboardSettings.ini";
+constexpr char kUserSettingsFileName[] = "keyboard.ini";
 constexpr char kLanguageLayoutIndex[] = "Languages/LanguageLayoutIndex";
 
 class KeyboardSettings : public QObject {
     Q_OBJECT
 
 public:
+    void extracted();
     explicit KeyboardSettings(QObject* parent = nullptr);
 
     int currentLanguageIndex() const;
@@ -29,9 +29,6 @@ private:
     const QString m_ApplicationFilePath = QCoreApplication::applicationDirPath() + QDir::separator();
 #endif
     const QString m_UserSettingsFullPath = QDir(m_ApplicationFilePath).filePath(kUserSettingsFileName);
-
-    void createUserIniFile();
-    void checkAndCorrectUserSettings(const QSettings& defaultSettings);
 };
 
 #endif // KEYBOARDSETTINGS_H
