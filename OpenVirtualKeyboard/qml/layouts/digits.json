@@ -13,7 +13,7 @@
             { "type": "key", "text": "4" },
             { "type": "key", "text": "5" },
             { "type": "key", "text": "6" },
-            { "type": "space" },
+            { "type": "key", "text": "-" },
             { "type": "filler", "stretch": 3.8 }
         ],
         [
@@ -27,7 +27,7 @@
         [
             { "type": "filler", "stretch": 3.8 },
             { "type": "key", "text": "0", "stretch": 2.0 },
-            { "type": "key", "text": ",", "alternatives": "." },
+            { "type": "key", "text": "."},
             { "type": "enter" },
             { "type": "filler", "stretch": 3.8 }
         ]
