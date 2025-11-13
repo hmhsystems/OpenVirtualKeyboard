@@ -9,7 +9,8 @@
 #include <QStandardPaths>
 
 constexpr char kUserSettingsFileName[] = "keyboard.ini";
-constexpr char kLanguageLayoutIndex[] = "Languages/LanguageLayoutIndex";
+constexpr char kUserSettingsSubFolder[] = "platforminputcontexts";
+constexpr char kLanguageLayoutIndex[] = "Layouts/CurrentIndex";
 
 class KeyboardSettings : public QObject {
     Q_OBJECT
@@ -23,12 +24,6 @@ public:
 
 private:
     QSettings* m_settings = nullptr;
-#ifdef Q_OS_ANDROID
-    const QString m_ApplicationFilePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QDir::separator();
-#else
-    const QString m_ApplicationFilePath = QCoreApplication::applicationDirPath() + QDir::separator();
-#endif
-    const QString m_UserSettingsFullPath = QDir(m_ApplicationFilePath).filePath(kUserSettingsFileName);
 };
 
 #endif // KEYBOARDSETTINGS_H

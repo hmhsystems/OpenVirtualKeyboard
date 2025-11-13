@@ -3,10 +3,19 @@
 KeyboardSettings::KeyboardSettings(QObject* parent)
     : QObject { parent }
 {
-    QDir().mkpath(m_ApplicationFilePath);
-    m_settings = new QSettings(m_UserSettingsFullPath, QSettings::IniFormat, parent);
+#ifdef Q_OS_ANDROID
+    QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+#else
+    QString settingsPath = QCoreApplication::applicationDirPath();
+#endif
 
-    QFileInfo iniFile(m_UserSettingsFullPath);
+    settingsPath = QDir(settingsPath).filePath(kUserSettingsSubFolder);
+    QDir().mkpath(settingsPath);
+
+    QString settingsFilePath = QDir(settingsPath).filePath(kUserSettingsFileName);
+    m_settings = new QSettings(settingsFilePath, QSettings::IniFormat, parent);
+
+    QFileInfo iniFile(settingsFilePath);
 
     if (!iniFile.exists()) {
         m_settings->setValue(kLanguageLayoutIndex, 0);
