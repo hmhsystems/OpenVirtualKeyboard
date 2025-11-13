@@ -25,7 +25,7 @@ KeyboardLayoutsProvider::KeyboardLayoutsProvider()
 {
     loadDefaultLayout();
     loadCustomLayouts();
-    qDebug() << "currentLayout" << m_keyboardSettings->currentLanguageIndex();
+    //qDebug() << "currentLayout" << m_keyboardSettings->currentLanguageIndex();
     setSelectedLayoutIndex(m_keyboardSettings->currentLanguageIndex());
     emit layoutsCountChanged();
 }
