@@ -1,7 +1,7 @@
-import QtQuick 2.12
-import QtQuick.Window 2.12
-import QtQuick.Controls 2.5
-import QtQuick.Layouts 1.12
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
+import QtQuick.Layouts
 import QtQuick.Templates 2.12 as T
 
 Window {
@@ -84,3 +84,4 @@ Window {
         }
     }
 }
+

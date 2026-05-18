@@ -4,10 +4,10 @@
  *  See accompanying LICENSE file
  */
 
-import QtQuick 2.0
-import QtQuick.Window 2.12
-import QtQuick.Controls 2.5
-import QtQuick.Templates 2.12 as T
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
+import QtQuick.Templates as T
 
 T.Popup {
     id: popup
@@ -80,4 +80,6 @@ T.Popup {
         ScrollIndicator.vertical: ScrollIndicator {}
     }
 }
+
+
 

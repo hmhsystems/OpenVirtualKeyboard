@@ -4,7 +4,7 @@
  *  See accompanying LICENSE file
  */
 
-import QtQuick 2.12
+import QtQuick
 
 DefaultSpecialKeyDelegate {
     Text {
@@ -14,3 +14,5 @@ DefaultSpecialKeyDelegate {
         text: parent.parent.text
     }
 }
+
+

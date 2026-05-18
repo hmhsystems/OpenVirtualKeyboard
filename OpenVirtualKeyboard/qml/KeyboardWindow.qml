@@ -4,8 +4,8 @@
  *  See accompanying LICENSE file
  */
 
-import QtQuick 2.0
-import QtQuick.Window 2.12
+import QtQuick
+import QtQuick.Window
 
 Window {
     flags: Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.WindowDoesNotAcceptFocus
@@ -15,3 +15,5 @@ Window {
         anchors.bottom: parent.bottom
     }
 }
+
+

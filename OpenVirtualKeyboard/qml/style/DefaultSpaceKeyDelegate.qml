@@ -4,8 +4,8 @@
  *  See accompanying LICENSE file
  */
 
-import QtQuick 2.12
-import QtQml 2.12
+import QtQuick
+import QtQml
 
 Rectangle {
     id: bg
@@ -36,3 +36,5 @@ Rectangle {
         text: Qt.locale( parent.parent.selectedLayout ).nativeLanguageName
     }
 }
+
+

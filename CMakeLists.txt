@@ -5,20 +5,12 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
-set(CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-option(USE_QTQUICKCOMPILED_RESOURCES OFF)
+find_package(Qt6 COMPONENTS Quick Core Gui REQUIRED)
 
-if(${USE_QTQUICKCOMPILED_RESOURCES})
-    find_package(Qt5QuickCompiler)
-    set(PROJECT_ADD_RESOURCES qtquick_compiler_add_resources)
-else()
-    set(PROJECT_ADD_RESOURCES qt5_add_resources)
-endif()
-
-find_package(Qt5 COMPONENTS Quick Core Gui REQUIRED)
-
-cmake_language(CALL ${PROJECT_ADD_RESOURCES} KEYBOARD_LIBRARY_RESOURCES ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/qml.qrc)
+qt_add_resources(KEYBOARD_LIBRARY_RESOURCES ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/qml.qrc)
 
 
 add_library(OpenVirtualKeyboard SHARED
@@ -29,6 +21,7 @@ add_library(OpenVirtualKeyboard SHARED
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/keyboardcreator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/keyboardlayoutmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/keyboardlayoutsprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/keyboardsettings.cpp
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/keyboardstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/keyboardwindowpositioner.cpp
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/keypressinterceptor.cpp
@@ -45,6 +38,7 @@ add_library(OpenVirtualKeyboard SHARED
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/keyboardcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/keyboardlayoutmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/keyboardlayoutsprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/keyboardsettings.h
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/keyboardlayouttype.h
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/keyboardstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/keyboardwindowpositioner.h
@@ -62,13 +56,18 @@ target_include_directories(
     OpenVirtualKeyboard
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard
-    ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
-    ${Qt5Quick_PRIVATE_INCLUDE_DIRS}
 )
+
 set_target_properties(OpenVirtualKeyboard
     PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/platforminputcontexts
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/platforminputcontexts
 )
 
-target_link_libraries(OpenVirtualKeyboard PRIVATE Qt5::Core Qt5::Quick Qt5::Gui)
+target_link_libraries(OpenVirtualKeyboard PRIVATE 
+    Qt6::Core 
+    Qt6::Quick 
+    Qt6::Gui
+    Qt6::GuiPrivate
+    Qt6::QuickPrivate
+)

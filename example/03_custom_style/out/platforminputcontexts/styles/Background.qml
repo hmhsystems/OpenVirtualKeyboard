@@ -1,5 +1,6 @@
-import QtQuick 2.12
+import QtQuick
 
 Rectangle {
     color: "#cfd2d9"
 }
+

@@ -4,9 +4,9 @@
  *  See accompanying LICENSE file
  */
 
-import QtQuick 2.12
-import QtQuick.Templates 2.12 as T
-import Qt.labs.qmlmodels 1.0
+import QtQuick
+import QtQuick.Templates as T
+import Qt.labs.qmlmodels
 import OpenVirtualKeyboard 1.0
 import "style"
 
@@ -167,3 +167,5 @@ Row {
         }
     }
 }
+
+

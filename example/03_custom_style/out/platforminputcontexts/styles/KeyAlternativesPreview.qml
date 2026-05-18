@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick
 import "components"
 
 KeyBase {
@@ -46,3 +46,4 @@ KeyBase {
         }
     }
 }
+

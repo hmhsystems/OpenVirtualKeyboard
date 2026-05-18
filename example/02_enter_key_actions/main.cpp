@@ -10,7 +10,7 @@ int main( int argc, char* argv[] )
     // :animateRollout:immediateLoading:ownWindow:noContentScrolling
     qputenv( "QT_IM_MODULE", "openvirtualkeyboard" );
 
-    QCoreApplication::setAttribute( Qt::AA_EnableHighDpiScaling );
+    // QCoreApplication::setAttribute( Qt::AA_EnableHighDpiScaling ); // Not needed in Qt 6
     QLoggingCategory::setFilterRules( "openvirtualkeyboard=true" );
 
     QGuiApplication app( argc, argv );
@@ -34,3 +34,4 @@ int main( int argc, char* argv[] )
 
     return app.exec();
 }
+

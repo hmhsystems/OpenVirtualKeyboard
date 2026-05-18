@@ -4,8 +4,8 @@
  *  See accompanying LICENSE file
  */
 
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
+import QtQuick
+import QtQuick.Layouts
 import OpenVirtualKeyboard 1.0
 import "style"
 
@@ -63,3 +63,5 @@ StackLayout {
         }
     }
 }
+
+

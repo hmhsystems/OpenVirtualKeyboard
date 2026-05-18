@@ -4,7 +4,7 @@
  *  See accompanying LICENSE file
  */
 
-import QtQuick 2.12
+import QtQuick
 
 QtObject {
     property Component key
@@ -20,3 +20,5 @@ QtObject {
     property Component keyAlternativesPreview
     property Component languageMenu
 }
+
+

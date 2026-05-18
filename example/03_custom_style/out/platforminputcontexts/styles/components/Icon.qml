@@ -4,7 +4,7 @@
  *  See accompanying LICENSE file
  */
 
-import QtQuick 2.12
+import QtQuick
 import 'icon-names.js' as IconNames
 
 Item {
@@ -36,3 +36,4 @@ Item {
         verticalAlignment: Text.AlignVCenter
     }
 }
+

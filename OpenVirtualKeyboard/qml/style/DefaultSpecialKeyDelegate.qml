@@ -4,7 +4,7 @@
  *  See accompanying LICENSE file
  */
 
-import QtQuick 2.12
+import QtQuick
 
 Rectangle {
     radius: parent.height * 0.08
@@ -15,3 +15,5 @@ Rectangle {
         margins: parent.height * 0.07
     }
 }
+
+

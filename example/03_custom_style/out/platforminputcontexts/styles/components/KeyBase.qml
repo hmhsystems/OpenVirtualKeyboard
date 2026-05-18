@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick
 
 Item {
     id: key
@@ -31,3 +31,4 @@ Item {
         }
     }
 }
+

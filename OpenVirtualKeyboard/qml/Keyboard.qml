@@ -4,9 +4,9 @@
  *  See accompanying LICENSE file
  */
 
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.5
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
 import OpenVirtualKeyboard 1.0
 import "style"
 
@@ -15,8 +15,8 @@ Item {
     
     property real contentWidth: width - keyboard.leftPadding - keyboard.rightPadding
     property real padding: contentWidth * 0.05
-    property real leftPadding: Math.max(Screen.pixelDensity * 12 * (InputContext.dpiScale /100), (Window.width - (Screen.pixelDensity * 168 * (InputContext.dpiScale /100)))/2)
-    property real rightPadding: Math.max(Screen.pixelDensity * 12 * (InputContext.dpiScale /100) , (Window.width - (Screen.pixelDensity * 168 * (InputContext.dpiScale /100)))/2)
+    property real leftPadding: Math.max(Screen.pixelDensity * 2 * (InputContext.dpiScale /100), (Window.width - (Screen.pixelDensity * 168 * (InputContext.dpiScale /100)))/2)
+    property real rightPadding: Math.max(Screen.pixelDensity * 2 * (InputContext.dpiScale /100) , (Window.width - (Screen.pixelDensity * 168 * (InputContext.dpiScale /100)))/2)
     property real topPadding: contentWidth * 0.005
     property real bottomPadding: contentWidth * 0.045
     property KeyboardStyle style: KeyboardStyle {}
@@ -126,3 +126,5 @@ Item {
         }
     }
 }
+
+

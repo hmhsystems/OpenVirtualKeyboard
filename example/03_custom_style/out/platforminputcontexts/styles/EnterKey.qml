@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick
 import "components"
 
 KeyBase {
@@ -31,3 +31,4 @@ KeyBase {
                   || key.parent.enterKeyAction === Qt.EnterKeyReturn ? 90 : 0
     }
 }
+
