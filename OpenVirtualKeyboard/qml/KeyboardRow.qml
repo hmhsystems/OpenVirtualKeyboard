@@ -6,7 +6,7 @@
 
 import QtQuick
 import QtQuick.Templates as T
-import Qt.labs.qmlmodels
+import QtQml.Models
 import OpenVirtualKeyboard 1.0
 import "style"
 
@@ -167,5 +167,3 @@ Row {
         }
     }
 }
-
-

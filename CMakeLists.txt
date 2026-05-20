@@ -62,6 +62,8 @@ set_target_properties(OpenVirtualKeyboard
     PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/platforminputcontexts
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/platforminputcontexts
+    PREFIX ""
+    OUTPUT_NAME "openvirtualkeyboard"
 )
 
 target_link_libraries(OpenVirtualKeyboard PRIVATE 

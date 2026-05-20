@@ -31,9 +31,13 @@ QPlatformInputContext* OpenVirtualKeyboardPlugin::create( const QString&     key
                                                           const QStringList& params )
 {
     qRegisterMetaType<KeyboardLayoutType::Type>();
+    qInfo() << "OVK plugin create called with key:" << key << "params:" << params;
 
     if ( key.compare( "openvirtualkeyboard", Qt::CaseInsensitive ) != 0 )
+    {
+        qWarning() << "OVK plugin ignored key:" << key;
         return nullptr;
+    }
 
     auto inputContext = new OpenVirtualKeyboardInputContext( params );
     QQmlEngine::setObjectOwnership( inputContext, QQmlEngine::CppOwnership );
@@ -59,6 +63,8 @@ QPlatformInputContext* OpenVirtualKeyboardPlugin::create( const QString&     key
                                       0,
                                       "KeyboardLayoutType",
                                       "Error: only enums" );
+
+    qInfo() << "OVK plugin initialized successfully";
 
     return inputContext;
 }

@@ -18,15 +18,20 @@ QString ovk::pluginAbsolutePath()
     static QString foundPath{};
 
     if (!foundPath.isEmpty())
+    {
+        qInfo() << "OVK plugin path cached:" << foundPath;
         return foundPath;
+    }
 
     const auto paths = QCoreApplication::libraryPaths();
+    qInfo() << "OVK library paths:" << paths;
 
     for (auto&& p : paths) {
-        qCDebug(logOvk) << "searching for plugin in" << p;
+        qInfo() << "OVK searching for plugin in" << p;
         auto path = p.endsWith( '/' ) ? p : ( p + '/' );
         path = path + "platforminputcontexts/";
         const auto libraries = QDir( path ).entryList( QDir::Files );
+        qInfo() << "OVK candidate folder:" << path << "files:" << libraries;
 
         for (auto&& lib : libraries) {
             if (!QLibrary::isLibrary( lib ))
@@ -34,6 +39,7 @@ QString ovk::pluginAbsolutePath()
             QPluginLoader loader{ path + lib };
             const auto pluginMetaData = loader.metaData();
             if (pluginMetaData["MetaData"].toObject()["Keys"].toArray().contains("ovk-magic-key")) {
+                qInfo() << "OVK recognized plugin:" << path + lib;
                 foundPath = path;
                 break;
             }
@@ -44,11 +50,9 @@ QString ovk::pluginAbsolutePath()
     }
 
     if (foundPath.isEmpty())
-        qCDebug( logOvk ) << "plugin path not found => default styles and "
-                             "layouts will be used";
+        qWarning() << "OVK plugin path not found; default styles and layouts will be used";
     else
-        qCWarning( logOvk ) << "found plugin here (expected 'styles' and 'layouts' location)"
-                          << foundPath;
+        qInfo() << "OVK found plugin path:" << foundPath;
 
     return foundPath;
 }

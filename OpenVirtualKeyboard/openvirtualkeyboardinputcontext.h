@@ -112,6 +112,7 @@ private:
     std::unique_ptr<AbstractPositioner> _positioner;
     QPointer<QObject> _focusObject = nullptr;
     bool _visible = false;
+    bool _showRequested = false;
     bool _shiftOn = false;
     bool _shiftLocked = false;
     bool _shiftEnabled = true;

@@ -79,6 +79,10 @@ bool OpenVirtualKeyboardInputContext::isAnimating() const
 
 void OpenVirtualKeyboardInputContext::showInputPanel()
 {
+    qInfo() << "OVK showInputPanel requested; keyboardCreated=" << _keyboardCreated
+            << "visible=" << _visible;
+    _showRequested = true;
+
     if (_keyboardCreated) {
         updateInputMethodHints();
         show();
@@ -89,6 +93,9 @@ void OpenVirtualKeyboardInputContext::showInputPanel()
 
 void OpenVirtualKeyboardInputContext::hideInputPanel()
 {
+    qInfo() << "OVK hideInputPanel requested; keyboardCreated=" << _keyboardCreated
+            << "visible=" << _visible;
+    _showRequested = false;
     _visible = false;
     _positioner->hide();
     emitInputPanelVisibleChanged();
@@ -307,6 +314,8 @@ void OpenVirtualKeyboardInputContext::onTextChanged()
 
 void OpenVirtualKeyboardInputContext::show()
 {
+    qInfo() << "OVK show() called; focusItem=" << imEnabledFocusItem()
+            << "keyboardCreated=" << _keyboardCreated;
     _visible = true;
     _positioner->show();
     emitInputPanelVisibleChanged();
@@ -390,20 +399,20 @@ void OpenVirtualKeyboardInputContext::updateInputMethodHints()
     if (!imEnabledItem)
         return;
 
-    const int  hints       = imEnabledItem->inputMethodQuery( Qt::ImHints ).toInt();
-    const auto layoutHints = static_cast<Type>( hints );
+    const int hints = imEnabledItem->inputMethodQuery( Qt::ImHints ).toInt();
+    const auto layoutHints = static_cast<int>( hints );
 
-    shiftOn      = layoutHints & ( Qt::ImhPreferUppercase | Qt::ImhUppercaseOnly );
-    shiftLock    = layoutHints & Qt::ImhUppercaseOnly;
+    shiftOn      = layoutHints & static_cast<int>( Qt::ImhPreferUppercase | Qt::ImhUppercaseOnly );
+    shiftLock    = layoutHints & static_cast<int>( Qt::ImhUppercaseOnly );
     shiftEnabled = !shiftLock;
 
     if (!shiftOn && isShiftRequiredByAutoUppercase( hints ))
         shiftOn = true;
 
-    if ((layout = static_cast<Type>( layoutHints & Dial ))) return;
-    if ((layout = static_cast<Type>( layoutHints & Digits ))) return;
-    if ((layout = static_cast<Type>( layoutHints & Numbers ))) return;
-    if (( layoutHints & Qt::ImhDate ) || ( layoutHints & Qt::ImhTime )) {
+    if ((layout = static_cast<Type>( layoutHints & static_cast<int>( Dial ))) ) return;
+    if ((layout = static_cast<Type>( layoutHints & static_cast<int>( Digits ))) ) return;
+    if ((layout = static_cast<Type>( layoutHints & static_cast<int>( Numbers ))) ) return;
+    if (( layoutHints & static_cast<int>( Qt::ImhDate ) ) || ( layoutHints & static_cast<int>( Qt::ImhTime ) )) {
         layout = Symbols;
         return;
     }
@@ -465,6 +474,8 @@ void OpenVirtualKeyboardInputContext::loadKeyboard()
         _keyboardCreator.reset( new KeyboardCreator( _keyboardComponentUrl ));
 
         connect( _keyboardCreator.get(), &KeyboardCreator::created, this, [this] {
+            qInfo() << "OVK keyboard creator emitted created; keyboardObject="
+                    << _keyboardCreator->keyboardObject();
             _positioner->setKeyboardObject( _keyboardCreator->keyboardObject() );
 
             // Pass dpiScale to QML
@@ -491,11 +502,14 @@ void OpenVirtualKeyboardInputContext::loadKeyboard()
                      this,
                      &OpenVirtualKeyboardInputContext::onShiftLocked );
 
-            if (imEnabledFocusItem())
+                qInfo() << "OVK created callback; showRequested=" << _showRequested
+                    << "imEnabledFocusItem=" << imEnabledFocusItem();
+                if (_showRequested && imEnabledFocusItem())
                 show();
         } );
     }
 
+            qInfo() << "OVK loadKeyboard() invoking creator; existing object=" << _keyboardCreator->keyboardObject();
     _keyboardCreator->createKeyboard();
 }
 
