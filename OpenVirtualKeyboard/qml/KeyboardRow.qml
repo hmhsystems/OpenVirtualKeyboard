@@ -6,7 +6,6 @@
 
 import QtQuick
 import QtQuick.Templates as T
-import QtQml.Models
 import OpenVirtualKeyboard 1.0
 import "style"
 
@@ -21,96 +20,116 @@ Row {
 
     Repeater {
         id: repeater
-        delegate: DelegateChooser {
-            role: "type"
 
-            DelegateChoice {
-                roleValue: "key"
+        Loader {
+            id: cell
+            required property var modelData
+            readonly property real __stretch: ( modelData && modelData.stretch !== undefined )
+                                              ? modelData.stretch
+                                              : 1
+            height: root.height
+            width: __stretch * root.adaptedStretch * root.baseWidth
+
+            sourceComponent: {
+                if ( !modelData )
+                    return null
+                switch ( modelData.type ) {
+                case "key":       return keyC
+                case "backspace": return backspaceC
+                case "enter":     return enterC
+                case "shift":     return shiftC
+                case "symbol":    return symbolC
+                case "language":  return languageC
+                case "space":     return spaceC
+                case "hide":      return hideC
+                case "page":      return pageC
+                case "filler":    return fillerC
+                default:          return null
+                }
+            }
+
+            Component {
+                id: keyC
                 Key {
                     id: keyButton
-                    property real __stretch: modelData.hasOwnProperty( "stretch" ) ? modelData.stretch : 1
-                    property string __text: modelData.hasOwnProperty( "text" ) ? modelData.text : ""
-                    alternatives: modelData.hasOwnProperty( "alternatives" )
-                                  ? modelData.alternatives
+                    anchors.fill: parent
+                    property string __text: cell.modelData.text !== undefined
+                                            ? cell.modelData.text
+                                            : ""
+                    alternatives: cell.modelData.alternatives !== undefined
+                                  ? cell.modelData.alternatives
                                   : ""
                     text: InputContext.shiftOn ? __text.toUpperCase() : __text
-                    delegate: style.key.createObject( keyButton )
+                    delegate: root.style.key.createObject( keyButton )
                     type: Key.KeyDefault
-                    height: root.height
-                    width: __stretch * adaptedStretch * baseWidth
                     Component.onDestruction: delegate.destroy()
                 }
             }
-            DelegateChoice {
-                roleValue: "backspace"
+
+            Component {
+                id: backspaceC
                 Key {
                     id: backspaceButton
-                    property real __stretch: modelData.hasOwnProperty( "stretch" ) ? modelData.stretch : 1
-                    delegate: style.backspaceKey.createObject( backspaceButton )
+                    anchors.fill: parent
+                    delegate: root.style.backspaceKey.createObject( backspaceButton )
                     type: Key.Backspace
-                    height: root.height
-                    width: __stretch * adaptedStretch * baseWidth
                     Component.onDestruction: delegate.destroy()
                 }
             }
-            DelegateChoice {
-                roleValue: "enter"
+
+            Component {
+                id: enterC
                 Key {
                     id: enterButton
-                    property real __stretch: modelData.hasOwnProperty( "stretch" ) ? modelData.stretch : 1
+                    anchors.fill: parent
                     readonly property bool enterKeyActionEnabled: InputContext.enterKeyActionEnabled
                     readonly property int enterKeyAction: InputContext.enterKeyAction
                     enabled: enterKeyActionEnabled
-                    delegate: style.enterKey.createObject( enterButton )
+                    delegate: root.style.enterKey.createObject( enterButton )
                     type: Key.Enter
-                    height: root.height
-                    width: __stretch * adaptedStretch * baseWidth
                     Component.onDestruction: delegate.destroy()
                 }
             }
-            DelegateChoice {
-                roleValue: "shift"
+
+            Component {
+                id: shiftC
                 Key {
                     id: shiftButton
-                    property real __stretch: modelData.hasOwnProperty( "stretch" ) ? modelData.stretch : 1
+                    anchors.fill: parent
                     readonly property bool shiftOn: InputContext.shiftOn
                     readonly property bool shiftLocked: InputContext.shiftLocked
                     enabled: InputContext.shiftEnabled
-                    delegate: style.shiftKey.createObject( shiftButton )
+                    delegate: root.style.shiftKey.createObject( shiftButton )
                     type: Key.Shift
-                    height: root.height
-                    width: __stretch * adaptedStretch * baseWidth
                     Component.onDestruction: delegate.destroy()
                 }
             }
-            DelegateChoice {
-                roleValue: "symbol"
+
+            Component {
+                id: symbolC
                 Key {
                     id: symbolButton
-                    property real __stretch: modelData.hasOwnProperty( "stretch" ) ? modelData.stretch : 1
-                    text: modelData.hasOwnProperty( "text" ) ? modelData.text : ""
-                    delegate: style.symbolKey.createObject( symbolButton )
+                    anchors.fill: parent
+                    text: cell.modelData.text !== undefined ? cell.modelData.text : ""
+                    delegate: root.style.symbolKey.createObject( symbolButton )
                     type: Key.Symbol
-                    height: root.height
-                    width: __stretch * adaptedStretch * baseWidth
                     Component.onDestruction: delegate.destroy()
                 }
             }
-            DelegateChoice {
-                roleValue: "language"
+
+            Component {
+                id: languageC
                 Key {
                     id: languageButton
-                    property real __stretch: modelData.hasOwnProperty( "stretch" ) ? modelData.stretch : 1
+                    anchors.fill: parent
                     property var languagesModel: InputContext.layoutProvider.layoutsList
                     property int selectedLanguageIndex: InputContext.layoutProvider.selectedLayoutIndex
                     onSelectedLanguageIndexChanged: InputContext.layoutProvider.selectedLayoutIndex
                                                     = selectedLanguageIndex
-                    property T.Popup languageMenu: style.languageMenu.createObject( languageButton )
+                    property T.Popup languageMenu: root.style.languageMenu.createObject( languageButton )
                     type: Key.Language
-                    delegate: style.languageKey.createObject( languageButton )
+                    delegate: root.style.languageKey.createObject( languageButton )
                     enabled: InputContext.layoutProvider.layoutsCount > 1
-                    height: root.height
-                    width: __stretch * adaptedStretch * baseWidth
                     onClicked: languageMenu.open()
                     Component.onDestruction: {
                         languageMenu.destroy()
@@ -118,51 +137,45 @@ Row {
                     }
                 }
             }
-            DelegateChoice {
-                roleValue: "space"
+
+            Component {
+                id: spaceC
                 Key {
                     id: spaceButton
-                    property real __stretch: modelData.hasOwnProperty( "stretch" ) ? modelData.stretch : 1
+                    anchors.fill: parent
                     readonly property string selectedLayout: InputContext.layoutProvider.selectedLayout
-                    delegate: style.spaceKey.createObject( spaceButton )
+                    delegate: root.style.spaceKey.createObject( spaceButton )
                     type: Key.Space
-                    height: root.height
-                    width: __stretch * adaptedStretch * baseWidth
                     Component.onDestruction: delegate.destroy()
                 }
             }
-            DelegateChoice {
-                roleValue: "hide"
+
+            Component {
+                id: hideC
                 Key {
                     id: hideButton
-                    property real __stretch: modelData.hasOwnProperty( "stretch" ) ? modelData.stretch : 1
-                    delegate: style.hideKey.createObject( hideButton )
+                    anchors.fill: parent
+                    delegate: root.style.hideKey.createObject( hideButton )
                     type: Key.Hide
-                    height: root.height
-                    width: __stretch * adaptedStretch * baseWidth
                     Component.onDestruction: delegate.destroy()
                 }
             }
-            DelegateChoice {
-                roleValue: "page"
+
+            Component {
+                id: pageC
                 Key {
                     id: pageButton
-                    property real __stretch: modelData.hasOwnProperty( "stretch" ) ? modelData.stretch : 1
-                    text: modelData.hasOwnProperty( "text" ) ? modelData.text : ""
-                    delegate: style.nextPageKey.createObject( pageButton )
+                    anchors.fill: parent
+                    text: cell.modelData.text !== undefined ? cell.modelData.text : ""
+                    delegate: root.style.nextPageKey.createObject( pageButton )
                     type: Key.NextPage
-                    height: root.height
-                    width: __stretch * adaptedStretch * baseWidth
                     Component.onDestruction: delegate.destroy()
                 }
             }
-            DelegateChoice {
-                roleValue: "filler"
-                Item {
-                    property real __stretch: modelData.hasOwnProperty( "stretch" ) ? modelData.stretch : 1
-                    height: root.height
-                    width: __stretch * adaptedStretch * baseWidth
-                }
+
+            Component {
+                id: fillerC
+                Item { anchors.fill: parent }
             }
         }
     }

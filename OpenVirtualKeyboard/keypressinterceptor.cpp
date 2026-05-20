@@ -155,10 +155,12 @@ void KeyPressInterceptor::forwardRelease(const QPointF& point)
 Key* KeyPressInterceptor::findKey(const QPointF& point) const
 {
     auto pos = point;
-    auto to = _forwardTo->childAt(pos.x(), pos.y());
+    QQuickItem* current = _forwardTo;
+    auto to = current->childAt(pos.x(), pos.y());
     while (to && !qobject_cast<Key*>(to)) {
-        pos = _forwardTo->mapToItem(to, pos);
-        to = to->childAt(pos.x(), pos.y());
+        pos = current->mapToItem(to, pos);
+        current = to;
+        to = current->childAt(pos.x(), pos.y());
     }
     return qobject_cast<Key*>(to);
 }
