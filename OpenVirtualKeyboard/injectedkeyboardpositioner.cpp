@@ -22,7 +22,6 @@ InjectedKeyboardPositioner::~InjectedKeyboardPositioner() = default;
 void InjectedKeyboardPositioner::setKeyboardObject(QObject* keyboardObject)
 {
     _keyboard = qobject_cast<QQuickItem*>(keyboardObject);
-    qInfo() << "OVK positioner setKeyboardObject; keyboard=" << _keyboard;
     if (!_keyboard)
         return;
 
@@ -34,9 +33,6 @@ void InjectedKeyboardPositioner::setKeyboardObject(QObject* keyboardObject)
         &InjectedKeyboardPositioner::onHeightChanged);
 
     updateFocusItem(_focusItem);
-
-    qInfo() << "OVK positioner after init; focusItem=" << _focusItem
-            << "contentItem=" << _contentItem;
 
     if (_contentItem)
         _keyboard->setY(_contentItem->height()); // inicia fora da tela (abaixo)
@@ -74,7 +70,6 @@ void InjectedKeyboardPositioner::updateFocusItem(QQuickItem* focusItem)
         _focusItemChanged = true;
 
     _focusItem = focusItem;
-    qInfo() << "OVK positioner updateFocusItem; focusItem=" << _focusItem;
     if (!_focusItem || !_keyboard)
         return;
 
@@ -88,8 +83,6 @@ void InjectedKeyboardPositioner::updateFocusItem(QQuickItem* focusItem)
         _contentItem->disconnect(this);
 
     _contentItem = contentItem;
-        qInfo() << "OVK positioner contentItem updated; contentItem=" << _contentItem
-            << "window=" << window;
     _keyboard->setParentItem(_contentItem);
     connect(_contentItem,
         &QQuickItem::heightChanged,
@@ -99,8 +92,6 @@ void InjectedKeyboardPositioner::updateFocusItem(QQuickItem* focusItem)
 
 void InjectedKeyboardPositioner::show()
 {
-    qInfo() << "OVK positioner show requested; keyboard=" << _keyboard
-            << "contentItem=" << _contentItem << "shown=" << _shown;
     // We send the call through event loop because Qt's input method context
     // called setFocusObject() and showInputPanel() in wrong order (for our purposes)
     // and this way we walked around some UI imperfect behaviour.
@@ -138,17 +129,11 @@ void InjectedKeyboardPositioner::show()
         } else {
             _keyboard->setY(visibleKeyboardTopY() + _offset);
         }
-
-        qInfo() << "OVK positioner show applied; y=" << _keyboard->y()
-                << "visibleTop=" << visibleKeyboardTopY()
-                << "offset=" << _offset;
     });
 }
 
 void InjectedKeyboardPositioner::hide()
 {
-    qInfo() << "OVK positioner hide requested; keyboard=" << _keyboard
-            << "contentItem=" << _contentItem;
     _shown = false;
 
     if (!_keyboard || !_contentItem)
@@ -173,9 +158,6 @@ bool InjectedKeyboardPositioner::isAnimating() const
 
 void InjectedKeyboardPositioner::updateContentItemPosition(bool updateKeyboardPosition)
 {
-    qInfo() << "OVK positioner updateContentItemPosition; shown=" << _shown
-            << "focusItem=" << _focusItem << "keyboard=" << _keyboard
-            << "contentItem=" << _contentItem;
     if (!_keyboard || !_contentItem || !_focusItem)
         return;
 

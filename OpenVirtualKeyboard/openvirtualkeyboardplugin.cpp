@@ -31,7 +31,6 @@ QPlatformInputContext* OpenVirtualKeyboardPlugin::create( const QString&     key
                                                           const QStringList& params )
 {
     qRegisterMetaType<KeyboardLayoutType::Type>();
-    qInfo() << "OVK plugin create called with key:" << key << "params:" << params;
 
     if ( key.compare( "openvirtualkeyboard", Qt::CaseInsensitive ) != 0 )
     {

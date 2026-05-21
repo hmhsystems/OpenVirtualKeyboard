@@ -26,8 +26,6 @@ KeyboardCreator::~KeyboardCreator() = default;
 
 void KeyboardCreator::createKeyboard()
 {
-    qInfo() << "OVK KeyboardCreator::createKeyboard loading=" << _loading
-            << "currentKeyboard=" << _keyboard;
     if (_loading)
         return;
 
@@ -39,14 +37,9 @@ void KeyboardCreator::createKeyboard()
     }
 
     auto window = usedWindow();
-    qInfo() << "OVK KeyboardCreator::createKeyboard app=" << app
-            << "focusWindow=" << app->focusWindow() << "usedWindow=" << window;
     if (!window) {
         _loading = true;
-        qWarning() << "OVK KeyboardCreator waiting for focusWindowChanged";
         connect(app, &QGuiApplication::focusWindowChanged, this, [this, app](){
-            qInfo() << "OVK focusWindowChanged fired; focusWindow=" << app->focusWindow()
-                    << "keyboard=" << _keyboard << "loading=" << _loading;
             if (!_keyboard && app->focusWindow())
                 continueKeyboardCreation();
         });
@@ -68,7 +61,6 @@ KeyPressInterceptor* KeyboardCreator::keyPressInterceptor() const
 
 void KeyboardCreator::createKeyboardInstance()
 {
-    qInfo() << "OVK KeyboardCreator::createKeyboardInstance component=" << _keyboardComponent.get();
     if (!_keyboardComponent) {
         _loading = false;
         return;
@@ -79,9 +71,6 @@ void KeyboardCreator::createKeyboardInstance()
         _loading = false;
         return;
     }
-
-    qInfo() << "OVK KeyboardCreator::createKeyboardInstance engine=" << engine
-            << "incubationController=" << engine->incubationController();
 
     if (!engine->incubationController()) {
         _incubationController.reset( new QQmlIncubationController );
@@ -130,8 +119,6 @@ void KeyboardCreator::statusChanged( QQmlIncubator::Status status )
 
 void KeyboardCreator::continueKeyboardCreation()
 {
-    qInfo() << "OVK KeyboardCreator::continueKeyboardCreation loading=" << _loading
-            << "component=" << _keyboardComponent.get();
     _loading = true;
 
     auto engine = usedQmlEngine();
@@ -154,8 +141,6 @@ void KeyboardCreator::continueKeyboardCreation()
     };
 
     _keyboardComponent.reset( new QQmlComponent( engine, _keyboardUrl, QQmlComponent::Asynchronous ));
-    qInfo() << "OVK KeyboardCreator created QQmlComponent; isLoading=" << _keyboardComponent->isLoading()
-            << "status=" << _keyboardComponent->status();
 
     if (_keyboardComponent->isLoading())
         connect( _keyboardComponent.get(), &QQmlComponent::statusChanged, this, std::move(continueLoading ));
@@ -174,9 +159,6 @@ QQmlEngine* KeyboardCreator::usedQmlEngine() const
     if (!engine)
         qCWarning(logOvk) << "Virtual keyboard can't be created => QML engine not available";
 
-    qInfo() << "OVK KeyboardCreator::usedQmlEngine window=" << usedWindow()
-            << "engine=" << engine;
-
     return engine;
 }
 
@@ -189,8 +171,5 @@ QQuickWindow* KeyboardCreator::usedWindow() const
     auto window = qobject_cast<QQuickWindow*>( app->focusWindow() );
     if (!window)
         return nullptr;
-
-    qInfo() << "OVK KeyboardCreator::usedWindow returning" << window;
-
     return window;
 }
