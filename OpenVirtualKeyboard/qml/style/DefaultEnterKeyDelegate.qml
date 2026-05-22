@@ -13,10 +13,7 @@ Rectangle {
                           : Qt.lighter( "#2E4B9E", 1.6 )
     border.color: parent.active ? "#80CB4E" : "transparent"
     border.width: parent.active ? 2 : 0
-    anchors {
-        fill: parent
-        margins: parent.height * 0.05
-    }
+    anchors.fill: parent
 
     Icon {
         id: icon

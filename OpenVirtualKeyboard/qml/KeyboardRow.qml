@@ -13,10 +13,14 @@ Row {
     id: root
     property alias model: repeater.model
     property StyleComponents style
-    readonly property real baseWidth: width / repeater.count
+    property real keySpacing: 0
+    // Width of one base cell, accounting for the spacing inserted between keys.
+    readonly property real baseWidth: repeater.count > 0
+                                      ? ( width - keySpacing * ( repeater.count - 1 ) ) / repeater.count
+                                      : 0
     property real adaptedStretch: 1.0
 
-    spacing: 0
+    spacing: keySpacing
 
     Repeater {
         id: repeater

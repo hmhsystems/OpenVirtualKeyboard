@@ -5,7 +5,7 @@ Virtual keyboard used for Qt Quick applications. Implemented as in-process keybo
 (handwriting, word suggestion, etc.), you may find it right fit for your project. It gives
 you an option to customize style, layouts, appearance behaviour and some more features. Plus
 it's free (MIT) and you can use it even in your commercial projects. Implemented against and
-works with Qt 5.12 as minimal version.
+works with Qt 6.8 as minimal version.
 
 * [Features](#features)
 * [Integration](#integration)
@@ -37,52 +37,6 @@ works with Qt 5.12 as minimal version.
 * [Inspiration](#inspiration)
 * [License](#license)
 
-# **<span style="color:red">WARNING:</span>** work in progress
-
-Even though the OpenVirtualKeyboard is already usable, I still need to implement some features. From
-the top of my head, this is the todo list.
-
-- [x] use logging category
-- [x] load custom styles from *styles* directory next to plugin
-- [ ] custom layouts
-    - [x] load custom layouts from *layouts* directory next to plugin
-    - [ ] validate scheme of custom layouts
-    - [x] language switch
-    - [x] language switch disabled for user when only one layout available
-    - [x] Space key should be feed with name of current layout (language) selected
-- [x] key alternatives uppercase
-- [x] disallow shift change when Qt::ImhUppercaseOnly hint is recognized
-- [x] special action on Enter key
-- [x] add default icons for enter key actions
-- [x] lazy loading vs immediate loading of keyboard (configuration parameter QT_IM_MODULE=openvirtualkeyboard:immediateLoading)
-- [x] keyboard in own top level window vs. keyboard component "injected" into applications window (configuration parameter QT_IM_MODULE=openvirtualkeyboard:ownWindow)
-    - [x] show keyboard window on screen where focused TextInput window is located ?
-    - [x] fix when contentItem is scrolled and and one clicks on another monitor and then into different TextField of window
-    - [x] fix when focus is in text field and tab is pressed, comntentItem is not scrolled
-    - [ ] why keyboard in own window is not animated when first time shown (only on second monitor)
-    - [x] fix position of keyboard when displayed and one clicks another window and then back onto keyboard window but into different input (animationRollout enabled) 
-    - [x] injected keyboard: setParentItem( focusedWindow->contentItem() )
-- [x] fix when application starts and keyboard is not loaded yet and someone clicks into TextFielkd
-- [x] focus item overlap
-    - [x] make focused input component visible even if keyboard overlaps it (scroll contentItem)
-    - [x] make contentItem scrolling optional (QT_IM_MODULE=openvirtualkeyboard:noContentScrolling)
-    - [x] use mapToItem when handling overlap
-    - [x] animated keyboard show/hide (configuration parameter QT_IM_MODULE=openvirtualkeyboard:animateRollout)
-- [ ] fullscreen mode
-    - [ ] show embedded input field on keyboard if focused item will not fit into window (or based on aspect ratio of window)
-    - [ ] follow settings of focused input field (Qt::ImhHiddenText (password) etc.)
-- [x] try Drawer instead of item for keyboard panel (not neccessary)
-- [x] alternative key characters
-- [x] pressed key popup
-- [ ] test pressed key popup on touch based device
-- [x] repeating press
-- [x] follow Qt::ImhNoAutoUppercase hint
-- [x] press and hold for shift lock
-- [ ] clean-up default en-US layout (alternative characters, ...)
-- [ ] optimizations
-   - [ ] allow disabling of some layout types (e.g. just use alphabet type and do not load dial, digits, ...) to optimize keyboard loading time
-   - [ ] do not load all 4 layout rows if layout does not specify all rows
-   - [ ] adapt height of keyboard based on count of keyboard rows
 
 # Features
 
@@ -205,7 +159,10 @@ is — placing it like any other component in your own QML — use the `external
            anchors.bottom: parent.bottom
            anchors.horizontalCenter: parent.horizontalCenter
            width: parent.width
-           height: parent.height * 0.35
+
+           // size the keys directly instead of setting an overall height:
+           keyHeight: 64       // height of a single key row
+           keySpacing: 6       // gap between keys (horizontal and vertical)
 
            // make the keys span the full width of the component:
            leftPadding: 0
@@ -213,6 +170,30 @@ is — placing it like any other component in your own QML — use the `external
        }
    }
    ```
+
+### Sizing: `keyHeight`, `keySpacing` and `height`
+
+The `Keyboard` component exposes two convenience properties:
+
+| Property | Meaning |
+| :--- | :--- |
+| `keyHeight` | Height of a single key row. |
+| `keySpacing` | Gap inserted between keys, both horizontally (between keys in a row) and vertically (between rows). |
+
+By default the keyboard's `height` is **derived** from these:
+
+```
+height = rowCount * keyHeight + (rowCount - 1) * keySpacing + topPadding + bottomPadding
+```
+(`rowCount` is `4`.) So you typically set `keyHeight`/`keySpacing` and let the height follow.
+
+If you set `height` explicitly on the `Keyboard` instance, that value **overrides** the derived
+height — the rows then divide the available height evenly (still separated by `keySpacing`), and
+`keyHeight` only acts as the default used to compute the (now overridden) height.
+
+> **Note:** `keySpacing` is the single source of the inter-key gap for the built-in style. If you
+> provide a *custom* `Key`/`EnterKey`/... style that also adds its own margins, those margins stack
+> on top of `keySpacing`.
 
 > **Notes**
 > - The `Keyboard` component registers itself with the plugin in `externalKeyboard` mode (it calls

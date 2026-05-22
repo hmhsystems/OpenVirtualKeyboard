@@ -12,8 +12,5 @@ Rectangle {
                          : parent.enabled ? "#F1F9EB" : "#F7F7F7"
     border.color: parent.active ? "#80CB4E" : "#E5E5E5"
     border.width: parent.active ? 2 : 1
-    anchors {
-        fill: parent
-        margins: parent.height * 0.05
-    }
+    anchors.fill: parent
 }

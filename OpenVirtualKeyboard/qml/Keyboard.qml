@@ -21,10 +21,20 @@ Item {
     property real bottomPadding: 0
     property KeyboardStyle style: KeyboardStyle {}
 
+    // Number of key rows in every layout (alphabet/symbols/...).
+    readonly property int rowCount: 4
+    // Height of a single key row. Host applications may override this.
+    property real keyHeight: keyboard.contentWidth * 0.085
+    // Spacing between keys (applied both horizontally and vertically).
+    property real keySpacing: keyboard.keyHeight * 0.1
+
     objectName: "keyboard"
     //width: parent ? Math.min(Window.width, Screen.pixelDensity * 168) : 0
     width: parent ? Window.width : 0
-    height: keyboard.contentWidth * 0.37
+    // Height is derived from keyHeight + keySpacing. If a host sets `height`
+    // explicitly on the Keyboard instance, that binding overrides this default.
+    height: rowCount * keyHeight + (rowCount - 1) * keySpacing
+            + keyboard.topPadding + keyboard.bottomPadding
     z:1;
 
     // When the plugin creates the keyboard itself (default/injected mode) it must
@@ -89,6 +99,7 @@ Item {
                 visible: InputContext.layoutType == KeyboardLayoutType.Alphabet
                 anchors.fill: parent
                 keyStyles: styles
+                keySpacing: keyboard.keySpacing
                 layoutModel: InputContext.layoutProvider.alphabetModel
             }
 
@@ -96,6 +107,7 @@ Item {
                 visible: InputContext.layoutType == KeyboardLayoutType.Symbols
                 anchors.fill: parent
                 keyStyles: styles
+                keySpacing: keyboard.keySpacing
                 layoutModel: InputContext.layoutProvider.symbolsModel
             }
 
@@ -103,6 +115,7 @@ Item {
                 visible: InputContext.layoutType == KeyboardLayoutType.Dial
                 anchors.fill: parent
                 keyStyles: styles
+                keySpacing: keyboard.keySpacing
                 layoutModel: InputContext.layoutProvider.dialModel
             }
 
@@ -110,6 +123,7 @@ Item {
                 visible: InputContext.layoutType == KeyboardLayoutType.Numbers
                 anchors.fill: parent
                 keyStyles: styles
+                keySpacing: keyboard.keySpacing
                 layoutModel: InputContext.layoutProvider.numbersModel
             }
 
@@ -117,6 +131,7 @@ Item {
                 visible: InputContext.layoutType == KeyboardLayoutType.Digits
                 anchors.fill: parent
                 keyStyles: styles
+                keySpacing: keyboard.keySpacing
                 layoutModel: InputContext.layoutProvider.digitsModel
             }
         }

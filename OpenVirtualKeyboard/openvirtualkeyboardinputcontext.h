@@ -35,6 +35,7 @@ class OpenVirtualKeyboardInputContext : public QPlatformInputContext {
     Q_PROPERTY(KeyboardLayoutsProvider* layoutProvider READ layoutProvider
             NOTIFY layoutProviderChanged)
     Q_PROPERTY(int dpiScale READ dpiScale WRITE setDpiScale NOTIFY dpiScaleChanged)
+    Q_PROPERTY(bool externalMode READ externalMode CONSTANT)
 public:
     OpenVirtualKeyboardInputContext(const QStringList& params);
     ~OpenVirtualKeyboardInputContext() override;
@@ -55,6 +56,12 @@ public:
     Qt::EnterKeyType enterKeyAction() const;
     KeyboardLayoutsProvider* layoutProvider() const;
     int dpiScale() const;
+    bool externalMode() const;
+
+    // Called from Keyboard.qml when the keyboard is instantiated directly inside
+    // the host application (direct usage / externalKeyboard mode). The host owns
+    // the geometry; the plugin only drives state, visibility and key handling.
+    Q_INVOKABLE void attachExternalKeyboard( QQuickItem* keyboard );
 
 signals:
     void shiftOnChanged();
@@ -117,6 +124,7 @@ private:
     bool _shiftLocked = false;
     bool _shiftEnabled = true;
     bool _keyboardCreated = false;
+    bool _externalMode = false;
     KeyboardLayoutType::Type _layoutType = KeyboardLayoutType::Alphabet;
     bool _enterKeyActionEnabled = false;
     Qt::EnterKeyType _enterKeyAction = Qt::EnterKeyDefault;

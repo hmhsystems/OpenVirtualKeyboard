@@ -12,10 +12,7 @@ Rectangle {
     color: parent.active ? Qt.rgba(0x80/255, 0xCB/255, 0x4E/255, 0.3) : "#FFFFFF"
     border.color: parent.active ? "#80CB4E" : "#E5E5E5"
     border.width: parent.active ? 2 : 1
-    anchors {
-        fill: parent
-        margins: parent.height * 0.05
-    }
+    anchors.fill: parent
 
     Text {
         anchors.centerIn: parent
