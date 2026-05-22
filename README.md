@@ -164,9 +164,66 @@ When keyboard by its height overlaps focused text input, contentItem of the wind
 so that the text input is still visible. This automatic scrolling can be disabled by setting
 `noContentScrolling` into list of additional parameters set to QT_IM_MODULE environment variable.
 
+### `externalKeyboard`
+
+When set, the plugin will **not** create or position the keyboard itself. Instead the host
+application is expected to instantiate the `Keyboard` component directly in its own QML and own
+its geometry (parent, size, position). See
+[Direct usage of Keyboard component in your app window](#direct-usage-of-keyboard-component-in-your-app-window).
+This is mutually exclusive with `ownWindow` and makes `animateRollout`/`noContentScrolling` no-ops
+(the host controls everything visually).
+
 ## Direct usage of Keyboard component in your app window
 
-TODO document + test + add example
+By default the plugin creates the keyboard for you and positions it (injected into the focused
+window, or in its own window). If you want full control over **where** and **how big** the keyboard
+is — placing it like any other component in your own QML — use the `externalKeyboard` mode.
+
+1. Add `externalKeyboard` to the `QT_IM_MODULE` parameters:
+   ```
+   QT_IM_MODULE=openvirtualkeyboard:externalKeyboard
+   ```
+2. Import the module and instantiate the `Keyboard` component in your window. You control its
+   geometry through normal QML bindings (`parent`, `width`, `height`, `anchors`, `x`/`y`, ...).
+   The plugin shows/hides the instance automatically when an input field gains/loses focus, so you
+   do **not** need to manage its `visible` property yourself:
+   ```qml
+   import QtQuick
+   import QtQuick.Controls
+   import OpenVirtualKeyboard 1.0
+
+   ApplicationWindow {
+       id: window
+       visible: true
+
+       TextField { anchors.centerIn: parent }
+
+       Keyboard {
+           id: virtualKeyboard
+           // geometry is fully under your control:
+           parent: window.contentItem
+           anchors.bottom: parent.bottom
+           anchors.horizontalCenter: parent.horizontalCenter
+           width: parent.width
+           height: parent.height * 0.35
+
+           // make the keys span the full width of the component:
+           leftPadding: 0
+           rightPadding: 0
+       }
+   }
+   ```
+
+> **Notes**
+> - The `Keyboard` component registers itself with the plugin in `externalKeyboard` mode (it calls
+>   `InputContext.attachExternalKeyboard()` internally), so only **one** instance should exist.
+> - In this mode the plugin does not reparent, resize or animate the keyboard — `leftPadding`,
+>   `rightPadding`, `width`, `height` etc. are whatever you bind them to. To make the keys span the
+>   full width of your component, set `leftPadding`/`rightPadding` to `0`.
+> - **Do not** bind the keyboard's `visible` property (e.g. to `Qt.inputMethod.visible`): the plugin
+>   drives it directly, and a QML binding would clash with that. If you need to react to show/hide
+>   for layout purposes, observe `Qt.inputMethod.visible` from a *different* item/property.
+> - Custom styles and layouts (see below) still work exactly the same.
 
 # Customizing keyboard style
 

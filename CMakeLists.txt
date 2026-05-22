@@ -15,6 +15,7 @@ qt_add_resources(KEYBOARD_LIBRARY_RESOURCES ${CMAKE_CURRENT_LIST_DIR}/OpenVirtua
 
 add_library(OpenVirtualKeyboard SHARED
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/commonpositioner.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/externalkeyboardpositioner.cpp
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/injectedkeyboardpositioner.cpp
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/key.cpp
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/keyalternativespreview.cpp
@@ -32,6 +33,7 @@ add_library(OpenVirtualKeyboard SHARED
 
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/abstractpositioner.h
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/commonpositioner.h
+    ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/externalkeyboardpositioner.h
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/injectedkeyboardpositioner.h
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/key.h
     ${CMAKE_CURRENT_LIST_DIR}/OpenVirtualKeyboard/keyalternativespreview.h

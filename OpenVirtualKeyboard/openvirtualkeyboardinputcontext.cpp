@@ -15,6 +15,7 @@
 #include "keyboardcreator.h"
 #include "injectedkeyboardpositioner.h"
 #include "keyboardwindowpositioner.h"
+#include "externalkeyboardpositioner.h"
 #include "keypressinterceptor.h"
 #include "key.h"
 #include "utils.h"
@@ -25,11 +26,16 @@ OpenVirtualKeyboardInputContext::OpenVirtualKeyboardInputContext( const QStringL
     const bool inOwnWindow = params.contains( QStringLiteral("ownWindow"), Qt::CaseInsensitive );
     const bool noScroll =
         params.contains( QStringLiteral( "noContentScrolling" ), Qt::CaseInsensitive );
+    _externalMode = params.contains( QStringLiteral( "externalKeyboard" ), Qt::CaseInsensitive );
 
     _keyboardComponentUrl = inOwnWindow ? QUrl( "qrc:///ovk/qml/KeyboardWindow.qml" )
                                         : QUrl( "qrc:///ovk/qml/Keyboard.qml" );
 
-    if (params.contains( QStringLiteral("immediateLoading"), Qt::CaseInsensitive ))
+    // The layouts provider must exist before any Keyboard.qml (host-instantiated
+    // or plugin-created) binds to InputContext.layoutProvider.
+    _layoutsProvider.reset( new KeyboardLayoutsProvider );
+
+    if (!_externalMode && params.contains( QStringLiteral("immediateLoading"), Qt::CaseInsensitive ))
         loadKeyboard();
 
     _positioner.reset( createPositioner( inOwnWindow, noScroll ));
@@ -462,7 +468,13 @@ QQuickItem* OpenVirtualKeyboardInputContext::imEnabledFocusItem() const
 
 void OpenVirtualKeyboardInputContext::loadKeyboard()
 {
-    _layoutsProvider.reset( new KeyboardLayoutsProvider );
+    // In external mode the keyboard is instantiated by the host application and
+    // registered via attachExternalKeyboard(); the plugin never creates its own.
+    if (_externalMode)
+        return;
+
+    if (!_layoutsProvider)
+        _layoutsProvider.reset( new KeyboardLayoutsProvider );
 
     if (!_keyboardCreator) {
         _keyboardCreator.reset( new KeyboardCreator( _keyboardComponentUrl ));
@@ -571,6 +583,8 @@ bool OpenVirtualKeyboardInputContext::isShiftDoubleClicked() const
 AbstractPositioner* OpenVirtualKeyboardInputContext::createPositioner( bool inOwnWindow,
                                                                        bool noContentScroll ) const
 {
+    if (_externalMode)
+        return new ExternalKeyboardPositioner;
     if (inOwnWindow)
         return new KeyboardWindowPositioner;
     return new InjectedKeyboardPositioner( noContentScroll );
@@ -579,6 +593,55 @@ AbstractPositioner* OpenVirtualKeyboardInputContext::createPositioner( bool inOw
 int OpenVirtualKeyboardInputContext::dpiScale() const
 {
     return _dpiScale;
+}
+
+bool OpenVirtualKeyboardInputContext::externalMode() const
+{
+    return _externalMode;
+}
+
+void OpenVirtualKeyboardInputContext::attachExternalKeyboard( QQuickItem* keyboard )
+{
+    if (!keyboard || _keyboardCreated)
+        return;
+
+    // Geometry stays under the host's control; the positioner only toggles
+    // visibility and wires up the preview/alternatives handling.
+    _positioner->setKeyboardObject( keyboard );
+
+    keyboard->setProperty( "dpiScale", _dpiScale );
+
+    auto interceptor = keyboard->findChild<KeyPressInterceptor*>( "keyInterceptor" );
+    if (interceptor) {
+        connect( interceptor,
+                 &KeyPressInterceptor::keyClicked,
+                 this,
+                 &OpenVirtualKeyboardInputContext::onKeyClicked );
+        connect( interceptor,
+                 &KeyPressInterceptor::keyRepeatClicked,
+                 this,
+                 &OpenVirtualKeyboardInputContext::onKeyClicked );
+        connect( interceptor,
+                 &KeyPressInterceptor::alternativeSelected,
+                 this,
+                 &OpenVirtualKeyboardInputContext::onAlternativeSelected );
+        connect( interceptor,
+                 &KeyPressInterceptor::shiftLocked,
+                 this,
+                 &OpenVirtualKeyboardInputContext::onShiftLocked );
+    }
+
+    connect( _positioner.get(),
+             &AbstractPositioner::animatingChanged,
+             this,
+             &OpenVirtualKeyboardInputContext::emitAnimatingChanged );
+
+    _keyboardCreated = true;
+
+    if (_showRequested && imEnabledFocusItem()) {
+        updateInputMethodHints();
+        show();
+    }
 }
 
 void OpenVirtualKeyboardInputContext::setDpiScale(int scale)

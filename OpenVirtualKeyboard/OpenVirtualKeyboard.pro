@@ -13,6 +13,7 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs depr
 
 SOURCES += \
     commonpositioner.cpp \
+    externalkeyboardpositioner.cpp \
     injectedkeyboardpositioner.cpp \
     key.cpp \
     keyalternativespreview.cpp \
@@ -31,6 +32,7 @@ SOURCES += \
 HEADERS += \
     abstractpositioner.h \
     commonpositioner.h \
+    externalkeyboardpositioner.h \
     injectedkeyboardpositioner.h \
     key.h \
     keyalternativespreview.h \

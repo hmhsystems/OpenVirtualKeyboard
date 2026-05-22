@@ -25,10 +25,25 @@ Item {
     //width: parent ? Math.min(Window.width, Screen.pixelDensity * 168) : 0
     width: parent ? Window.width : 0
     height: keyboard.contentWidth * 0.37
-    parent: Overlay.overlay
     z:1;
 
-    Component.onCompleted: InputContext.informKeyboardCreated()
+    // When the plugin creates the keyboard itself (default/injected mode) it must
+    // live in the application overlay. In "direct usage" (externalKeyboard) mode
+    // the host nests this component in its own QML, so we must NOT override the
+    // parent assigned by that nesting.
+    Binding {
+        target: keyboard
+        property: "parent"
+        value: Overlay.overlay
+        when: !InputContext.externalMode
+    }
+
+    Component.onCompleted: {
+        if (InputContext.externalMode)
+            InputContext.attachExternalKeyboard( keyboard )
+        else
+            InputContext.informKeyboardCreated()
+    }
 
     StyleComponents {
         id: styles
