@@ -8,6 +8,7 @@
 #include "key.h"
 #include <QCursor>
 #include <QGuiApplication>
+#include <QJSValue>
 #include <QStyleHints>
 
 KeyPressInterceptor::KeyPressInterceptor()
@@ -198,10 +199,31 @@ void KeyPressInterceptor::startProperTimer()
 
     if (type == Key::KeyDefault) {
         const auto alternatives = _lastActive->alternatives();
-        if (!alternatives.isValid() || alternatives.isNull())
-            _delayTimer = startTimer(_actionDelay);
-        else
+        const auto keyText = _lastActive->text();
+        bool hasRealAlternatives = false;
+        if (alternatives.isValid() && !alternatives.isNull()) {
+            QStringList items;
+            if (alternatives.canConvert<QJSValue>()) {
+                const auto array = alternatives.value<QJSValue>();
+                const int length = array.property("length").toInt();
+                for (int i = 0; i < length; ++i)
+                    items << array.property(i).toString();
+            }
+            if (items.isEmpty() && alternatives.canConvert<QStringList>())
+                items = alternatives.toStringList();
+            if (items.isEmpty() && alternatives.canConvert<QString>())
+                items << alternatives.toString();
+            for (const auto& item : items) {
+                if (!item.isEmpty() && item.compare(keyText, Qt::CaseInsensitive) != 0) {
+                    hasRealAlternatives = true;
+                    break;
+                }
+            }
+        }
+        if (hasRealAlternatives)
             _alternativesTimer = startTimer(_actionDelay);
+        else
+            _delayTimer = startTimer(_actionDelay);
     }
 }
 

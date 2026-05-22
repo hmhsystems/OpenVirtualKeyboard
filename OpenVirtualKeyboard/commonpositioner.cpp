@@ -6,6 +6,7 @@
 
 #include <QtMath>
 #include <QQuickItem>
+#include <QJSValue>
 #include "commonpositioner.h"
 #include "keypressinterceptor.h"
 #include "keypreview.h"
@@ -109,28 +110,10 @@ void CommonPositioner::onActiveKeyLeaved()
     updateKeyPreview( nullptr );
 }
 
-void CommonPositioner::updateKeyPreview( Key* key )
+void CommonPositioner::updateKeyPreview( Key* /*key*/ )
 {
     _keyAlternatives->setVisible( false );
-
-    if (!key || key->type() != Key::KeyDefault) {
-        _keyPreview->setVisible( false );
-        return;
-    }
-
-    const auto topLeft = _keyPressInterceptor->mapFromItem( key, QPointF( 0, 0 ));
-    _keyPreview->setKeyWidth( key->width() );
-    _keyPreview->setKeyHeight( key->height() );
-    _keyPreview->setKeyText( key->text() );
-    const auto previewDelegate = _keyPreview->delegate();
-    _keyPreview->setWidth( previewDelegate->width() );
-    _keyPreview->setHeight( previewDelegate->height() );
-    _keyPreview->setY( topLeft.y() - ( previewDelegate->height() - key->height() ));
-    qreal x = (topLeft.x() + (key->width() / 2) - (_keyPreview->width() / 2));
-    if (x < 0)
-        x = _keyboard->mapToItem( _keyPressInterceptor, QPointF( 0, 0 )).x();
-    _keyPreview->setX( x );
-    _keyPreview->setVisible( true );
+    _keyPreview->setVisible( false );
 }
 
 void CommonPositioner::updateAlternativesPreview( const QStringList& alternativesModel, Key* key )

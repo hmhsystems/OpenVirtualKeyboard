@@ -15,21 +15,22 @@ Item {
     Rectangle {
         anchors {
             fill: parent
-            margins: key.parent.keyHeight * 0.068
+            margins: key.parent.keyHeight * 0.05
         }
-        radius: key.parent.keyHeight * 0.1
-        color: "#555"
+        radius: key.parent.keyHeight * 0.12
+        color: "#FFFFFF"
+        border.color: "#80CB4E"
+        border.width: 2
 
         Text {
             anchors {
                 centerIn: parent
                 verticalCenterOffset: -(key.parent.keyHeight * 0.68)
             }
-            font.pixelSize: key.parent.keyHeight * 0.44
+            font.pixelSize: key.parent.keyHeight * 0.48
+            font.bold: true
             text: key.parent.keyText
-            color: "white"
+            color: "#1A2238"
         }
     }
 }
-
-

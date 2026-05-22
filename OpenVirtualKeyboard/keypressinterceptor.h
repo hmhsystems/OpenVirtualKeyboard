@@ -65,7 +65,7 @@ private:
     qreal         _lastX              = 0;
     QQuickItem*   _forwardTo          = nullptr;
     int           _touchPointId       = -1;
-    int           _actionDelay        = 300;
+    int           _actionDelay        = 500;
     int           _repeatInterval     = 50;
     int           _delayTimer         = 0;
     int           _repeatTimer        = 0;

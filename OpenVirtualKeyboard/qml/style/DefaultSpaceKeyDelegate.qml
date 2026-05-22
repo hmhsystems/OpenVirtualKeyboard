@@ -9,32 +9,20 @@ import QtQml
 
 Rectangle {
     id: bg
-    radius: parent.height * 0.08
-    color: parent.active ? Qt.lighter( "#343434", 1.2 ) : "#343434"
+    radius: parent.height * 0.12
+    color: parent.active ? Qt.rgba(0x80/255, 0xCB/255, 0x4E/255, 0.3) : "#FFFFFF"
+    border.color: parent.active ? "#80CB4E" : "#E5E5E5"
+    border.width: parent.active ? 2 : 1
     anchors {
         fill: parent
-        margins: parent.height * 0.068
-    }
-
-    Icon {
-        visible: !languageName.visible
-        anchors {
-            centerIn: bg
-            verticalCenterOffset: bg.height * 0.2
-        }
-        size: bg.height * 0.3
-        color: "white"
-        name: 'myspace'
+        margins: parent.height * 0.05
     }
 
     Text {
         id: languageName
-        visible: contentWidth < bg.width + 20
         anchors.centerIn: parent
-        font.pixelSize: parent.height * 0.4
-        color: "dimgray"
+        font.pixelSize: parent.height * 0.32
+        color: "#8A8FA3"
         text: Qt.locale( parent.parent.selectedLayout ).nativeLanguageName
     }
 }
-
-

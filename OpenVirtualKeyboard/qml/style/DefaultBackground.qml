@@ -7,7 +7,5 @@
 import QtQuick
 
 Rectangle {
-    color: "#111"
+    color: "#FFFFFF"
 }
-
-

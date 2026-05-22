@@ -11,10 +11,9 @@ DefaultSpecialKeyDelegate {
 
     Text {
         anchors.centerIn: parent
-        font.pixelSize: parent.height * 0.3
-        color: "white"
+        font.pixelSize: parent.height * 0.32
+        font.bold: true
+        color: "#1A2238"
         text: key.parent.text
     }
 }
-
-

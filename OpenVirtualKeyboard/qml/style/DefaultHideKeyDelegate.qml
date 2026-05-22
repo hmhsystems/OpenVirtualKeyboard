@@ -10,22 +10,20 @@ DefaultSpecialKeyDelegate {
     Icon {
         anchors {
             centerIn: parent
-            verticalCenterOffset: -parent.height * 0.12
+            verticalCenterOffset: -parent.height * 0.10
         }
-        size: parent.height * 0.5
-        color: "white"
+        size: parent.height * 0.42
+        color: "#1A2238"
         name: 'keyboard'
     }
 
     Icon {
         anchors {
             centerIn: parent
-            verticalCenterOffset: parent.height * 0.2
+            verticalCenterOffset: parent.height * 0.22
         }
-        size: parent.height * 0.3
-        color: "white"
+        size: parent.height * 0.22
+        color: "#1A2238"
         name: 'down-open'
     }
 }
-
-
