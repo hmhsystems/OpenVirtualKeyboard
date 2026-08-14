@@ -28,7 +28,7 @@
             { "type": "key", "text": "1" },
             { "type": "key", "text": "2" },
             { "type": "key", "text": "3" },
-            { "type": "hide" }
+            { "type": "enter" }
         ],
         [
             { "type": "key", "text": "√" },
@@ -37,7 +37,7 @@
             { "type": "filler", "stretch": 0.5 },
             { "type": "key", "text": "0", "stretch": 2.0 },
             { "type": "key", "text": ",", "alternatives": "." },
-            { "type": "enter" }
+            { "type": "hide" }
         ]
     ]
 ]
