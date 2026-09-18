@@ -7,10 +7,12 @@
 import QtQuick
 
 DefaultSpecialKeyDelegate {
+    id: key
+
     Icon {
         anchors.centerIn: parent
         size: parent.height * 0.45
-        color: "#1A2238"
+        color: key.parent.colors.keyText
         name: 'cancel-alt'
     }
 }

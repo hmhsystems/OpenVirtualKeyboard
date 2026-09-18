@@ -7,10 +7,12 @@
 import QtQuick
 
 DefaultSpecialKeyDelegate {
+    id: key
+
     Icon {
         anchors.centerIn: parent
         size: parent.height * 0.45
-        color: enabled ? "#1A2238" : "#BFBFBF"
+        color: enabled ? key.parent.colors.keyText : key.parent.colors.keyDisabledText
         name: 'globe'
     }
 }

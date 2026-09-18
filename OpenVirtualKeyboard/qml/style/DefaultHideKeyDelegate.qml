@@ -7,13 +7,15 @@
 import QtQuick
 
 DefaultSpecialKeyDelegate {
+    id: key
+
     Icon {
         anchors {
             centerIn: parent
             verticalCenterOffset: -parent.height * 0.10
         }
         size: parent.height * 0.42
-        color: "#1A2238"
+        color: key.parent.colors.keyText
         name: 'keyboard'
     }
 
@@ -23,7 +25,7 @@ DefaultSpecialKeyDelegate {
             verticalCenterOffset: parent.height * 0.22
         }
         size: parent.height * 0.22
-        color: "#1A2238"
+        color: key.parent.colors.keyText
         name: 'down-open'
     }
 }

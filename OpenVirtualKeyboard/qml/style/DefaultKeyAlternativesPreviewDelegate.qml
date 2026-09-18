@@ -20,8 +20,8 @@ Item {
             margins: key.margin
         }
         radius: key.parent.keyWidth * 0.12
-        color: "#FFFFFF"
-        border.color: "#80CB4E"
+        color: key.parent.colors.previewBackground
+        border.color: key.parent.colors.accent
         border.width: 2
 
         ListView {
@@ -36,7 +36,7 @@ Item {
 
                 Text {
                     text: modelData
-                    color: "#1A2238"
+                    color: key.parent.colors.previewText
                     font.pixelSize: key.parent.keyHeight * 0.44
                     font.bold: true
                     anchors {
@@ -47,7 +47,7 @@ Item {
             }
             highlightMoveVelocity: -1
             highlight: Rectangle {
-                color: "#80CB4E"
+                color: key.parent.colors.accent
                 opacity: 0.25
                 radius: width * 0.12
             }

@@ -56,6 +56,7 @@ Row {
                 id: keyC
                 Key {
                     id: keyButton
+                    readonly property KeyboardColors colors: root.style.colors
                     anchors.fill: parent
                     property string __text: cell.modelData.text !== undefined
                                             ? cell.modelData.text
@@ -74,6 +75,7 @@ Row {
                 id: backspaceC
                 Key {
                     id: backspaceButton
+                    readonly property KeyboardColors colors: root.style.colors
                     anchors.fill: parent
                     delegate: root.style.backspaceKey.createObject( backspaceButton )
                     type: Key.Backspace
@@ -85,6 +87,7 @@ Row {
                 id: enterC
                 Key {
                     id: enterButton
+                    readonly property KeyboardColors colors: root.style.colors
                     anchors.fill: parent
                     readonly property bool enterKeyActionEnabled: InputContext.enterKeyActionEnabled
                     readonly property int enterKeyAction: InputContext.enterKeyAction
@@ -99,6 +102,7 @@ Row {
                 id: shiftC
                 Key {
                     id: shiftButton
+                    readonly property KeyboardColors colors: root.style.colors
                     anchors.fill: parent
                     readonly property bool shiftOn: InputContext.shiftOn
                     readonly property bool shiftLocked: InputContext.shiftLocked
@@ -113,6 +117,7 @@ Row {
                 id: symbolC
                 Key {
                     id: symbolButton
+                    readonly property KeyboardColors colors: root.style.colors
                     anchors.fill: parent
                     text: cell.modelData.text !== undefined ? cell.modelData.text : ""
                     delegate: root.style.symbolKey.createObject( symbolButton )
@@ -125,6 +130,7 @@ Row {
                 id: languageC
                 Key {
                     id: languageButton
+                    readonly property KeyboardColors colors: root.style.colors
                     anchors.fill: parent
                     property var languagesModel: InputContext.layoutProvider.layoutsList
                     property int selectedLanguageIndex: InputContext.layoutProvider.selectedLayoutIndex
@@ -146,6 +152,7 @@ Row {
                 id: spaceC
                 Key {
                     id: spaceButton
+                    readonly property KeyboardColors colors: root.style.colors
                     anchors.fill: parent
                     readonly property string selectedLayout: InputContext.layoutProvider.selectedLayout
                     delegate: root.style.spaceKey.createObject( spaceButton )
@@ -158,6 +165,7 @@ Row {
                 id: hideC
                 Key {
                     id: hideButton
+                    readonly property KeyboardColors colors: root.style.colors
                     anchors.fill: parent
                     delegate: root.style.hideKey.createObject( hideButton )
                     type: Key.Hide
@@ -169,6 +177,7 @@ Row {
                 id: pageC
                 Key {
                     id: pageButton
+                    readonly property KeyboardColors colors: root.style.colors
                     anchors.fill: parent
                     text: cell.modelData.text !== undefined ? cell.modelData.text : ""
                     delegate: root.style.nextPageKey.createObject( pageButton )

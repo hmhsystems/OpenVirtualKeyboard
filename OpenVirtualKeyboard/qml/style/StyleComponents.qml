@@ -19,6 +19,7 @@ QtObject {
     property Component keyPreview
     property Component keyAlternativesPreview
     property Component languageMenu
+    property KeyboardColors colors
 }
 
 

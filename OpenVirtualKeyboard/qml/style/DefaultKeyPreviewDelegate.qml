@@ -18,8 +18,8 @@ Item {
             margins: key.parent.keyHeight * 0.05
         }
         radius: key.parent.keyHeight * 0.12
-        color: "#FFFFFF"
-        border.color: "#80CB4E"
+        color: key.parent.colors.previewBackground
+        border.color: key.parent.colors.accent
         border.width: 2
 
         Text {
@@ -30,7 +30,7 @@ Item {
             font.pixelSize: key.parent.keyHeight * 0.48
             font.bold: true
             text: key.parent.keyText
-            color: "#1A2238"
+            color: key.parent.colors.previewText
         }
     }
 }

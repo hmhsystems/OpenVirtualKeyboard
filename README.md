@@ -206,6 +206,33 @@ height — the rows then divide the available height evenly (still separated by 
 >   for layout purposes, observe `Qt.inputMethod.visible` from a *different* item/property.
 > - Custom styles and layouts (see below) still work exactly the same.
 
+### Colors: `colors`
+
+The built-in style takes all its colors from the `colors` group
+([KeyboardColors.qml](OpenVirtualKeyboard/qml/style/KeyboardColors.qml)), so you can recolor the
+keyboard (e.g. for a dark theme) without writing a custom style. Override only the entries you need;
+bindings are live, so switching themes at runtime recolors the keyboard immediately.
+
+```qml
+Keyboard {
+    colors.keyBackground: darkTheme ? "#383838" : "#FFFFFF"
+    colors.keyText: darkTheme ? "#FFFFFF" : "#1A2238"
+    colors.accent: "#80CB4E"
+}
+```
+
+| Entry | Used for |
+|-------|----------|
+| `accent` | Pressed key border, shift on/locked, preview border and highlight |
+| `keyBackground`, `keyPressedBackground`, `keyBorder` | Plain and space keys (the border is shared by the special keys) |
+| `keyText`, `keyDisabledText`, `spaceKeyText` | Key labels and icons, disabled icons, language name on the space bar |
+| `specialKeyBackground`, `specialKeyDisabledBackground` | Shift, backspace, symbols, language, next page and hide keys |
+| `enterKeyBackground`, `enterKeyPressedBackground`, `enterKeyDisabledBackground`, `enterKeyText`, `enterKeyDisabledText` | Enter key |
+| `previewBackground`, `previewText` | Key preview and key alternatives preview bubbles |
+| `languageMenuBackground`, `languageMenuBorder`, `languageMenuText`, `languageMenuSelected`, `languageMenuPressed` | Language selection menu |
+
+Custom styles (see below) can read the same colors as `parent.colors`.
+
 # Customizing keyboard style
 
 Style of keyboard is fully customizable, which means that you can provide your own style for every

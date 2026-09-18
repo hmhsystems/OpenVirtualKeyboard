@@ -15,9 +15,24 @@ T.Popup {
     width: parent.height * 4.5
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
                              contentHeight + topPadding + bottomPadding)
+    // open above the language key instead of over the keyboard rows below it
+    y: -height
     margins: 0
     verticalPadding: 3
     z: 2;
+
+    // Popups share the window overlay and are stacked by z. When the keyboard
+    // itself lives inside a Popup, the menu must be stacked above that popup,
+    // otherwise it is drawn behind the keyboard.
+    onAboutToShow: z = Math.max( 2, hostPopupZ() + 1 )
+
+    function hostPopupZ() {
+        const overlay = T.Overlay.overlay
+        let item = popup.parent
+        while (item && item.parent && item.parent !== overlay)
+            item = item.parent
+        return item && item.parent === overlay ? item.z : 0
+    }
 
     enter: Transition {
         NumberAnimation { property: "scale"; from: 0.9; to: 1.0; easing.type: Easing.OutQuint; duration: 220 }
@@ -33,9 +48,9 @@ T.Popup {
         width: popup.width
         implicitHeight: 40
         radius: 3
-        color: "#eee"
+        color: popup.parent.colors.languageMenuBackground
         border.width: 1
-        border.color: "#ccc"
+        border.color: popup.parent.colors.languageMenuBorder
     }
 
     contentItem: ListView {
@@ -59,6 +74,7 @@ T.Popup {
                       ? Qt.locale( modelData ).nativeLanguageName
                       : modelData
                 font.pixelSize: popup.parent.height * 0.36
+                color: popup.parent.colors.languageMenuText
             }
 
             background: Rectangle {
@@ -66,9 +82,9 @@ T.Popup {
                 height: parent.height
                 visible: item.down || index === popup.parent.selectedLanguageIndex
                 color: item.down
-                       ? "#d6d6d6"
+                       ? popup.parent.colors.languageMenuPressed
                        : index === popup.parent.selectedLanguageIndex
-                         ? "#ddd"
+                         ? popup.parent.colors.languageMenuSelected
                          : "transparent"
             }
             onClicked: {

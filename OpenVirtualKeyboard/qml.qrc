@@ -23,6 +23,7 @@
         <file>qml/layouts/numbers.json</file>
         <file>qml/layouts/symbols.json</file>
         <file>qml/style/StyleComponents.qml</file>
+        <file>qml/style/KeyboardColors.qml</file>
         <file>qml/style/DefaultKeyPreviewDelegate.qml</file>
         <file>qml/style/DefaultKeyAlternativesPreviewDelegate.qml</file>
         <file>qml/KeyboardWindow.qml</file>

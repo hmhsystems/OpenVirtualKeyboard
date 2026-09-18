@@ -20,6 +20,9 @@ Item {
     property real topPadding: 0
     property real bottomPadding: 0
     property KeyboardStyle style: KeyboardStyle {}
+    // Colors of the default delegates. Host applications may override single
+    // entries, e.g. `colors.keyBackground: "#383838"` (see style/KeyboardColors.qml).
+    property KeyboardColors colors: KeyboardColors {}
 
     // Number of key rows in every layout (alphabet/symbols/...).
     readonly property int rowCount: 4
@@ -57,6 +60,7 @@ Item {
 
     StyleComponents {
         id: styles
+        colors: keyboard.colors
         key: Qt.createComponent( style.keyUrl )
         enterKey: Qt.createComponent( style.enterKeyUrl )
         backspaceKey: Qt.createComponent( style.backspaceKeyUrl )
@@ -145,12 +149,14 @@ Item {
         KeyPreview {
             id: keyPreview
             objectName: "keyPreview"
+            readonly property KeyboardColors colors: keyboard.colors
             delegate: styles.keyPreview.createObject( keyPreview )
         }
 
         KeyAlternativesPreview {
             id: alternativesPreview
             objectName: "keyAlternatives"
+            readonly property KeyboardColors colors: keyboard.colors
             uppercase: InputContext.shiftOn
             delegate: styles.keyAlternativesPreview.createObject( alternativesPreview )
         }
