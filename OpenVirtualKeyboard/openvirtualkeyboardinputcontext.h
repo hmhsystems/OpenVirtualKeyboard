@@ -118,6 +118,7 @@ private:
     std::unique_ptr<KeyboardCreator> _keyboardCreator;
     std::unique_ptr<AbstractPositioner> _positioner;
     QPointer<QObject> _focusObject = nullptr;
+    QPointer<QQuickItem> _externalKeyboard;
     bool _visible = false;
     bool _showRequested = false;
     bool _shiftOn = false;

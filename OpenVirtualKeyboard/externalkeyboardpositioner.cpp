@@ -17,6 +17,18 @@ void ExternalKeyboardPositioner::setKeyboardObject( QObject* keyboardObject )
     // the key-preview / alternatives-preview handling to the interceptor.
     init( item );
 
+    // The host may destroy its keyboard (a Loader deactivated, the QML reloaded)
+    // while the input context lives on: forget it, so show()/hide() do not touch
+    // a deleted item. Its children (interceptor, previews) are deleted with it.
+    connect( item, &QObject::destroyed, this, [this, item] {
+        if (_keyboard != item)
+            return;
+        _keyboard            = nullptr;
+        _keyPressInterceptor = nullptr;
+        _keyPreview          = nullptr;
+        _keyAlternatives     = nullptr;
+    });
+
     // host controls when it is shown; keep it hidden until showInputPanel()
     if (_keyboard)
         _keyboard->setVisible( false );

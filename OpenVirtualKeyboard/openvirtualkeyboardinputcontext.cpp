@@ -602,8 +602,17 @@ bool OpenVirtualKeyboardInputContext::externalMode() const
 
 void OpenVirtualKeyboardInputContext::attachExternalKeyboard( QQuickItem* keyboard )
 {
-    if (!keyboard || _keyboardCreated)
+    if (!keyboard || keyboard == _externalKeyboard)
         return;
+
+    // The last keyboard attached is the one used: the host may destroy its keyboard
+    // and create another (a Loader deactivated, the QML reloaded), in any order.
+    _externalKeyboard = keyboard;
+    connect( keyboard, &QObject::destroyed, this, [this] {
+        // cleared already when the destroyed keyboard was the current one
+        if (!_externalKeyboard)
+            _keyboardCreated = false;
+    });
 
     // Geometry stays under the host's control; the positioner only toggles
     // visibility and wires up the preview/alternatives handling.
@@ -634,7 +643,8 @@ void OpenVirtualKeyboardInputContext::attachExternalKeyboard( QQuickItem* keyboa
     connect( _positioner.get(),
              &AbstractPositioner::animatingChanged,
              this,
-             &OpenVirtualKeyboardInputContext::emitAnimatingChanged );
+             &OpenVirtualKeyboardInputContext::emitAnimatingChanged,
+             Qt::UniqueConnection );
 
     _keyboardCreated = true;
 
